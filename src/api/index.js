@@ -26,7 +26,6 @@ async function start() {
             path: '/',
             handler: (request, reply) => {
                 logger.info('Test Message');
-
                 return reply.response({key: "some value"});
             }
         }
@@ -38,10 +37,11 @@ async function start() {
             hbs: require('handlebars')
         },
         relativeTo: __dirname,
-        path: 'templates', //the directory that contains your main templates
+        helpersPath: './templates', //the directory that contains your template helpers
+        partialsPath: './templates/partials',
+        path: __dirname + '/templates', //the directory that contains your main templates
         layoutPath: './templates/layout', //the directory that contains layout templates
-        layout: 'Layout',
-        helpersPath: './templates/helpers', //the directory that contains your template helpers
+
     });
 
     // load all routes:
