@@ -1,6 +1,7 @@
 'use strict';
 
 const Hapi = require('hapi');
+const Vision = require('@hapi/vision');
 const _ = require('lodash');
 
 const config = {
@@ -30,6 +31,18 @@ async function start() {
             }
         }
     ]);
+    await server.register(Vision);
+
+    server.views({
+        engines: {
+            hbs: require('handlebars')
+        },
+        relativeTo: __dirname,
+        path: 'templates', //the directory that contains your main templates
+        layoutPath: './templates/layout', //the directory that contains layout templates
+        layout: 'Layout',
+        helpersPath: './templates/helpers', //the directory that contains your template helpers
+    });
 
     // load all routes:
     const routeModules = require('./routesFetcher');

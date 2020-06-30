@@ -8,10 +8,20 @@ module.exports = [
     {
         method: 'GET',
         path: `/${MODEL_NAME}`,
-        handler: async (request, reply) => {
+        handler: {
 
-            return reply.response(await service.getAll());
+            view: {
+                template: 'users',
+                context: {
+                    title: 'Using handlebars in Hapi',
+                    message: 'Tutorial'
+                }
+            }
         }
+        // handler: async (request, reply) => {
+        //
+        //     return reply.response(await service.getAll());
+        // }
     },
 
     {
