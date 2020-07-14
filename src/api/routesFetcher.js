@@ -5,7 +5,7 @@ const find = require('find'),
 
 function getTogetherAllRoutes() {
     const routesArray = [];
-    console.log(routesArray);
+    //console.log(routesArray);
     find.fileSync(/route.js/, __dirname).forEach(route => routesArray.push(require(route)));
     return flatten(routesArray);
 }

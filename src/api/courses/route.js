@@ -2,7 +2,7 @@
 
 const MODEL_NAME = 'courses';
 
-const Course = require('./service');
+const Course = require('../add-course/service');
 
 module.exports = [
     {
@@ -12,7 +12,7 @@ module.exports = [
             const courses = await Course.getAll();
             return h.view('courses',
                 {
-                    title: 'Courses add',
+                    title: 'Courses',
                     message: 'Tutorial',
                     courses
                 },
@@ -21,23 +21,43 @@ module.exports = [
         }
     },
     {
-        method: 'POST',
-        path: `/${MODEL_NAME}`,
-        handler: function (request, h) {
+        method: 'GET',
+        path: `/${MODEL_NAME}/{id}`,
+        handler: async function (request, h) {
+            const course = await Course.getById(request.params.id);
+            return h.view('course',
+                {
+                    title: `Courses ${course.title}` ,
+                    message: 'Tutorial',
+                    course
+                },
+                {layout:'Layout'}
+            )
+        }
+    },
+     {
+        method: 'GET',
+         path: `/${MODEL_NAME}/{id}/edit`,
+        handler: async function (request, h) {
+             const course = await Course.getById(request.params.id);
+             return h.view('course-edit',
+                 {
 
-            const course = new Course(request.payload.title, request.payload.price, request.payload.img)
-            course.save();
+                     message: 'Tutorial',
+                     course
+                 },
+                 {layout:'Layout'}
+             )
+         }
+     },
+     {
+         method: 'POST',
+         path: `/${MODEL_NAME}/edit`,
+         handler: async function (request, h) {
+            await Course.update(request.payload);
+            return "Наконец-то";
 
-            if (!course) {
-                throw Boom.notFound(`No tutorial available for slug »${slug}«`)
-            }
-            return course;
         }
     }
-    // {
-    //     method: 'POST',
-    //     path: `/${MODEL_NAME}`,
-    //     console.log(require.body)
-    // }
 
 ]

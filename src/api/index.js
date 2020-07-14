@@ -4,6 +4,7 @@ const Hapi = require('hapi');
 const Vision = require('@hapi/vision');
 const _ = require('lodash');
 
+
 const config = {
     port: process.env.PORT || 8080,
     routes: {
@@ -27,11 +28,13 @@ async function start() {
             handler: (request, reply) => {
                 logger.info('Test Message');
                 return reply.response({key: "some value"});
+
             }
         }
     ]);
-    await server.register(Vision);
 
+
+    await server.register(Vision);
     server.views({
         engines: {
             hbs: require('handlebars')
@@ -41,8 +44,8 @@ async function start() {
         partialsPath: './templates/partials',
         path: __dirname + '/templates', //the directory that contains your main templates
         layoutPath: './templates/layout', //the directory that contains layout templates
-
     });
+
 
     // load all routes:
     const routeModules = require('./routesFetcher');
