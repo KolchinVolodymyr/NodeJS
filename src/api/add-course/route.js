@@ -1,6 +1,6 @@
 'use strict';
 
-const MODEL_NAME = 'add-edit-course';
+const MODEL_NAME = 'add-course';
 
 const Course = require('./service');
 

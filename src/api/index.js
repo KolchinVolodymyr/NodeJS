@@ -33,8 +33,19 @@ async function start() {
         }
     ]);
 
-
+// register plugins to server instance
+//     await server.register([
+//         {
+//             plugin: require('inert')
+//         },
+//         {
+//             plugin: require('vision')
+//         }
+//         ])
     await server.register(Vision);
+
+    //// view configuration
+    //   const viewsPath = Path.resolve(__dirname, 'public', 'views')
     server.views({
         engines: {
             hbs: require('handlebars')
