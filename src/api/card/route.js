@@ -29,6 +29,14 @@ module.exports = [
             await Card.add(course);
             return h.redirect(`/${MODEL_NAME}`);
         }
+    },
+    {
+        method: 'DELETE',
+        path: `/${MODEL_NAME}/remove/{id}`,
+        handler: async function (request, h) {
+            const card = await Card.remove(request.params.id);
+            return h.response(card).code(200);
+        }
     }
 
 

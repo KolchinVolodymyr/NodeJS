@@ -1,9 +1,8 @@
 'use strict';
 
 const Hapi = require('hapi');
-const Vision = require('@hapi/vision');
 const _ = require('lodash');
-
+const path = require('path')
 
 const config = {
     port: process.env.PORT || 8080,
@@ -33,23 +32,25 @@ async function start() {
         }
     ]);
 
-// register plugins to server instance
-//     await server.register([
-//         {
-//             plugin: require('inert')
-//         },
-//         {
-//             plugin: require('vision')
-//         }
-//         ])
-    await server.register(Vision);
+    // register plugins to server instance
+    await server.register([
+        {
+            plugin: require('inert')
+        },
+        {
+            plugin: require('@hapi/vision')
+        }
+    ])
 
-    //// view configuration
-    //   const viewsPath = Path.resolve(__dirname, 'public', 'views')
+    // view configuration
+    //const viewsPath = path.resolve(__dirname, 'public', 'views');
+
+
     server.views({
         engines: {
             hbs: require('handlebars')
         },
+
         relativeTo: __dirname,
         helpersPath: './templates', //the directory that contains your template helpers
         partialsPath: './templates/partials',
