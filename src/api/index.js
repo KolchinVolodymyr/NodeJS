@@ -2,7 +2,8 @@
 
 const Hapi = require('hapi');
 const _ = require('lodash');
-const path = require('path')
+const path = require('path');
+const mongoose = require('mongoose');
 
 const config = {
     port: process.env.PORT || 8080,
@@ -19,6 +20,9 @@ if (process.env.IS_RELEASE === 'false') config.host = 'localhost';
 const server = new Hapi.server(config);
 
 async function start() {
+
+
+
     //routes:
     server.route([
         {
@@ -64,6 +68,10 @@ async function start() {
     server.route(routeModules);
 
     try {
+        //connect BD
+        const url =`mongodb+srv://admin:380990302581@cluster0.eufzr.mongodb.net/<dbname>?retryWrites=true&w=majority`
+        await mongoose.connect(url,{useNewUrlParser: true, useUnifiedTopology: true});
+
         server.start();
         console.log('Server running at:', server.info.uri);
     } catch (e) {
