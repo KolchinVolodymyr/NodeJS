@@ -9,7 +9,7 @@ module.exports = [
         method: 'GET',
         path: `/${MODEL_NAME}`,
         handler: async function (request, h) {
-            const courses = await Course.getAll();
+            const courses = await Course.find();
             return h.view('courses',
                 {
                     title: 'Courses',
@@ -24,7 +24,7 @@ module.exports = [
         method: 'GET',
         path: `/${MODEL_NAME}/{id}`,
         handler: async function (request, h) {
-            const course = await Course.getById(request.params.id);
+            const course = await Course.findById(request.params.id);
             return h.view('course',
                 {
                     title: `Courses ${course.title}` ,

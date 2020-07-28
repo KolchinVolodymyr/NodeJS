@@ -10,7 +10,7 @@ module.exports = [
         method: 'GET',
         path: `/${MODEL_NAME}/{id}/edit`,
         handler: async function (request, h) {
-            const course = await Course.getById(request.params.id);
+            const course = await Course.findById(request.params.id);
             return h.view('course-edit',
                 {
 
@@ -25,8 +25,22 @@ module.exports = [
         method: 'POST',
         path: `/${MODEL_NAME}/edit`,
         handler: async function (request, h) {
-            await Course.update(request.payload);
+            await Course.findByIdAndUpdate(request.payload.id, request.payload);
             return h.redirect(`/${MODEL_NAME}`);
+
+        }
+    },
+    {
+        method: 'POST',
+        path: `/${MODEL_NAME}/remove`,
+        handler: async function (request, h) {
+            try {
+                await Course.deleteOne({_id: request.payload.id});
+                return h.redirect(`/${MODEL_NAME}`);
+            } catch (e){
+                console.log(e);
+            }
+
 
         }
     }

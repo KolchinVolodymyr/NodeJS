@@ -69,8 +69,8 @@ async function start() {
 
     try {
         //connect BD
-        const url =`mongodb+srv://admin:380990302581@cluster0.eufzr.mongodb.net/<dbname>?retryWrites=true&w=majority`
-        await mongoose.connect(url,{useNewUrlParser: true, useUnifiedTopology: true});
+        const url =`mongodb+srv://admin:380990302581@cluster0.eufzr.mongodb.net/shop`
+        await mongoose.connect(url,{useNewUrlParser: true, useUnifiedTopology: true,  useFindAndModify: false});
 
         server.start();
         console.log('Server running at:', server.info.uri);

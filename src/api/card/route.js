@@ -25,7 +25,7 @@ module.exports = [
         method: 'POST',
         path: `/${MODEL_NAME}/add`,
         handler: async function (request, h) {
-            const course = await Course.getById(request.payload.id);
+            const course = await Course.findById(request.payload.id);
             await Card.add(course);
             return h.redirect(`/${MODEL_NAME}`);
         }

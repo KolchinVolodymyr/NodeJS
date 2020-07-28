@@ -23,7 +23,12 @@ module.exports = [
         path: `/${MODEL_NAME}`,
         handler: function (request, h) {
 
-            const course = new Course(request.payload.title, request.payload.price, request.payload.img)
+            // const course = new Course(request.payload.title, request.payload.price, request.payload.img)
+            const course = new Course({
+                title: request.payload.title,
+                price: request.payload.price,
+                img: request.payload.img
+            });
             course.save();
 
             if (!course) {
