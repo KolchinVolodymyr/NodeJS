@@ -13,7 +13,7 @@ module.exports = [
             const course = await Course.findById(request.params.id);
             return h.view('course-edit',
                 {
-
+                    title: 'Edit course',
                     message: 'Tutorial',
                     course
                 },

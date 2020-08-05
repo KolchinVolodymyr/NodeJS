@@ -51,10 +51,13 @@ async function start() {
         {
             method: 'GET',
             path: '/',
-            handler: (request, reply) => {
-                logger.info('Test Message');
-                return reply.response({key: "some value"});
-
+            handler: function (request, h) {
+                return h.view('index',
+                    {
+                        title: 'Home'
+                    },
+                    {layout:'Layout'}
+                )
             }
         }
     ]);

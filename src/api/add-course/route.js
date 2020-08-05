@@ -34,7 +34,7 @@ module.exports = [
             if (!course) {
                 throw Boom.notFound(`No tutorial available for slug »${slug}«`)
             }
-            return course;
+            return h.redirect(`/courses`);
         }
     }
 
