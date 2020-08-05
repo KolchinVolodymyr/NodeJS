@@ -4,8 +4,7 @@ const Hapi = require('hapi');
 const _ = require('lodash');
 const path = require('path');
 const mongoose = require('mongoose');
-const session = require('express-session')
-const User = require('./users/service')
+const User = require('./users/service');
 
 const config = {
     port: process.env.PORT || 8080,
@@ -13,6 +12,9 @@ const config = {
         cors: {
             origin: ['*'],
             credentials: true
+        },
+        files: {
+            relativeTo: path.join(__dirname, 'public')
         }
     }
 };
@@ -22,7 +24,28 @@ if (process.env.IS_RELEASE === 'false') config.host = 'localhost';
 const server = new Hapi.server(config);
 
 async function start() {
+    // register plugins to server instance
+    await server.register([
+        {
+            plugin: require('inert')
+        },
+        {
+            plugin: require('@hapi/vision')
+        }
+    ]);
 
+    server.ext({
+        type: 'onRequest',
+        method: async function (request, h) {
+            try {
+                const user = await User.findById('5f273f0833365d3314b8c1dd')
+                request.user = user;
+            } catch (e) {
+                console.log(e)
+            }
+            return h.continue;
+        }
+    });
     //routes:
     await server.route([
         {
@@ -35,19 +58,16 @@ async function start() {
             }
         }
     ]);
-
-    // register plugins to server instance
-    await server.register([
-        {
-            plugin: require('inert')
-        },
-        {
-            plugin: require('@hapi/vision')
+    await server.route({
+        method: 'GET',
+        path: '/{param*}',
+        handler: {
+            directory: {
+                path: '.',
+                redirectToSlash: true
+            }
         }
-    ])
-
-    // view configuration
-    //const viewsPath = path.resolve(__dirname, 'public', 'views');
+    });
 
 
     server.views({

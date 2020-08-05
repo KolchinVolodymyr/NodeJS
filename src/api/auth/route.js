@@ -5,7 +5,7 @@ const MODEL_NAME = 'login';
 module.exports = [
     {
         method: 'GET',
-        path: `/${MODEL_NAME}`,
+        path: `/auth/${MODEL_NAME}`,
         handler:  function (request, h) {
             return h.view('auth/login',
                 {

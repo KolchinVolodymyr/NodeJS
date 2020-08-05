@@ -1,0 +1,23 @@
+.price {
+    font-size: 2rem;
+}
+.course {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.course h1 {
+    margin-bottom: 2rem;
+}
+.course .price.big {
+    font-size: 2.5rem;
+}
+.card-action .action {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.auth {
+    padding-top: 1rem;
+}

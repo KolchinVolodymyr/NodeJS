@@ -45,9 +45,6 @@ module.exports = [
         method: 'POST',
         path: `/${MODEL_NAME}/add`,
         handler: async function (request, h) {
-            const user = await User.findById('5f273f0833365d3314b8c1dd');
-            request.user = user;
-
             const course = await Course.findById(request.payload.id);
             await request.user.addToCart(course);
             return h.redirect(`/${MODEL_NAME}`);
@@ -57,9 +54,6 @@ module.exports = [
         method: 'DELETE',
         path: `/${MODEL_NAME}/remove/{id}`,
         handler: async function (request, h) {
-            const user1 = await User.findById('5f273f0833365d3314b8c1dd');
-            request.user = user1;
-
             await request.user.removeFromCart(request.params.id)
             
             const user = await request.user.populate('cart.items.courseId').execPopulate()

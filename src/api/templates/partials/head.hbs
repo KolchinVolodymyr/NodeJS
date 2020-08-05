@@ -10,29 +10,47 @@
     <!-- Compiled and minified CSS -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
 
-    <style>
-        .price {
-            font-size: 2rem;
-        }
-        .course {
-            width: 100%;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-        .course h1 {
-            margin-bottom: 2rem;
-        }
-        .course .price.big {
-            font-size: 2.5rem;
-        }
-        .card-action .action {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
-        .auth {
-            padding-top: 1rem;
-        }
-    </style>
+    <!--style.css   -->
+    <link rel="stylesheet" href="../style.css">
 </head>
+<nav>
+    <div class="nav-wrapper">
+        <a href="#" class="brand-logo">Приложение курсов</a>
+        <ul id="nav-mobile" class="right hide-on-med-and-down">
+
+            {{#if isHome}}
+                <li class="active"><a href="/">Главная</a></li>
+            {{else}}
+                <li><a href="/">Главная</a></li>
+            {{/if}}
+
+            {{#if isCourses}}
+                <li class="active"><a href="/courses">Курсы</a></li>
+            {{else}}
+                <li><a href="/courses">Курсы</a></li>
+
+
+
+                {{#if isAdd}}
+                    <li class="active"><a href="/add-course">Добавить курс</a></li>
+                {{else}}
+                    <li><a href="/add-course">Добавить курс</a></li>
+                {{/if}}
+
+                {{#if isCard}}
+                    <li class="active"><a href="/card">Корзина</a></li>
+                {{else}}
+                    <li><a href="/card">Корзина</a></li>
+                {{/if}}
+
+<!--                <li><a href="/auth/logout">Выйти</a></li>-->
+
+                {{#if isLogin}}
+                    <li class="active"><a href="/auth/login#login">Войти</a></li>
+                {{else}}
+                    <li><a href="/auth/login#login">Войти</a></li>
+                {{/if}}
+            {{/if}}
+        </ul>
+    </div>
+</nav>
