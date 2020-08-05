@@ -3,6 +3,7 @@
 const MODEL_NAME = 'add-course';
 
 const Course = require('./service');
+const User = require('../users/service')
 
 module.exports = [
     {
@@ -21,14 +22,18 @@ module.exports = [
     {
         method: 'POST',
         path: `/${MODEL_NAME}`,
-        handler: function (request, h) {
+        handler: async function (request, h) {
+            //Временное решение
+            const user = await User.findById('5f273f0833365d3314b8c1dd');
+            request.user = user;
 
-            // const course = new Course(request.payload.title, request.payload.price, request.payload.img)
             const course = new Course({
                 title: request.payload.title,
                 price: request.payload.price,
-                img: request.payload.img
+                img: request.payload.img,
+                userId: request.user
             });
+
             course.save();
 
             if (!course) {

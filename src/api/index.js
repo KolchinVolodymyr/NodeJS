@@ -4,6 +4,8 @@ const Hapi = require('hapi');
 const _ = require('lodash');
 const path = require('path');
 const mongoose = require('mongoose');
+const session = require('express-session')
+const User = require('./users/service')
 
 const config = {
     port: process.env.PORT || 8080,
@@ -21,10 +23,8 @@ const server = new Hapi.server(config);
 
 async function start() {
 
-
-
     //routes:
-    server.route([
+    await server.route([
         {
             method: 'GET',
             path: '/',
@@ -54,7 +54,6 @@ async function start() {
         engines: {
             hbs: require('handlebars')
         },
-
         relativeTo: __dirname,
         helpersPath: './templates', //the directory that contains your template helpers
         partialsPath: './templates/partials',
@@ -70,7 +69,21 @@ async function start() {
     try {
         //connect BD
         const url =`mongodb+srv://admin:380990302581@cluster0.eufzr.mongodb.net/shop`
-        await mongoose.connect(url,{useNewUrlParser: true, useUnifiedTopology: true,  useFindAndModify: false});
+        await mongoose.connect(url,{
+            useNewUrlParser: true,
+            useUnifiedTopology: true,
+            useFindAndModify: false
+        });
+        const candidate = await User.findOne()
+        if(!candidate) {
+            const user = new User({
+                email: 'Volodymyr@gmail.com',
+                name: 'Volodymyr',
+                cart: { items: []}
+            })
+            await user.save();
+
+        }
 
         server.start();
         console.log('Server running at:', server.info.uri);
@@ -83,3 +96,5 @@ async function start() {
 // if you need required some other Promise response data, please use next call at the end of the init call, for e.g.:
 // someCall().then(start);
 start();
+
+

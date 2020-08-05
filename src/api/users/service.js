@@ -1,32 +1,70 @@
-"use strict";
+const {Schema, model} = require('mongoose')
 
-const _ = require('lodash'),
-    boom = require('boom');
-
-const usersArray = [];
-
-module.exports = {
-
-    getAll: () => Promise.resolve(usersArray),
-
-    getById: async (id) => {
-        if (!id) { throw boom.badData('Wrong id')}
-
-        return Promise.resolve(_.first(_.filter(usersArray, user => user.id === id)));
+const userSchema = new Schema({
+    email: {
+        type: String,
+        required: true
     },
-
-    /**
-     * creates new entry
-     * @param {Object} data - required
-     * @param {String} data.id - required
-     * @param {String} data.name - required
-     *
-     * @returns {Object | Error} - response
-     */
-    create: (data) => {
-        if (_.isEmpty(data)) throw boom.badData("It must be an object");
-        usersArray.push(data);
-
-        return Promise.resolve(data);
+    name: {
+        type: String,
+        required: true
+    },
+    cart: {
+        items: [
+            {
+                count: {
+                    type: Number,
+                    required: true,
+                    default: 1
+                },
+                courseId: {
+                    type: Schema.Types.ObjectId,
+                    ref: 'Course',
+                    required: true
+                }
+            }
+        ]
     }
-};
+})
+
+
+userSchema.methods.addToCart = function(course) {
+    const items = [...this.cart.items]
+    const idx = items.findIndex(c => {
+        return c.courseId.toString() === course._id.toString()
+    })
+
+    if (idx >= 0) {
+        items[idx].count = items[idx].count + 1
+    } else {
+        items.push({
+            courseId: course._id,
+            count: 1
+        })
+    }
+
+    this.cart = {items}
+    return this.save()
+}
+
+
+userSchema.methods.removeFromCart = function(id) {
+    let items = [...this.cart.items]
+    const idx = items.findIndex(c => c.courseId.toString() === id.toString())
+
+    if (items[idx].count === 1) {
+        items = items.filter(c => c.courseId.toString() !== id.toString())
+    } else {
+        items[idx].count--
+    }
+
+    this.cart = {items}
+    return this.save()
+}
+
+userSchema.methods.clearCart = function() {
+    this.cart = {items: []}
+    return this.save()
+}
+
+module.exports = model('User', userSchema)
