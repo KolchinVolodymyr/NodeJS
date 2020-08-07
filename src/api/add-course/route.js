@@ -12,7 +12,8 @@ module.exports = [
             return h.view('add',
                 {
                     title: 'Courses add',
-                    message: 'Tutorial'
+                    message: 'Tutorial',
+                    isAdd: true
                 },
                 {layout:'Layout'}
             )

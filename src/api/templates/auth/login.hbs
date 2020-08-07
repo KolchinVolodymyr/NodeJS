@@ -8,14 +8,14 @@
         </div>
         <div id="login" class="col s6 offset-s3">
             <h1>Войти в магазин</h1>
-            <form action="/" method="post">
+            <form action="/auth/login" method="post">
                 <div class="input-field">
                     <input id="email" name="email" type="email" class="validate" required>
                     <label for="email">Email</label>
                     <span class="helper-text" data-error="Введите email"></span>
                 </div>
                 <div class="input-field">
-                    <input id="password" name="password" type="number" class="validate" required>
+                    <input id="password" name="password" type="password" class="validate" required>
                     <label for="password">Пароль</label>
                     <span class="helper-text" data-error="Введите пароль"></span>
                 </div>
@@ -24,19 +24,19 @@
         </div>
         <div id="register" class="col s6 offset-s3">
             <h1>Создать аккаунт</h1>
-            <form action="/" method="post">
+            <form action="/auth/register" method="post">
                 <div class="input-field">
                     <input id="remail" name="email" type="email" class="validate" required>
                     <label for="remail">Email</label>
                     <span class="helper-text" data-error="Введите email"></span>
                 </div>
                 <div class="input-field">
-                    <input id="rpassword" name="password" type="number" class="validate" required>
+                    <input id="rpassword" name="password" type="password" class="validate" required>
                     <label for="rpassword">Пароль</label>
                     <span class="helper-text" data-error="Введите пароль"></span>
                 </div>
                 <div class="input-field">
-                    <input id="confirm" name="confirm" type="number" class="validate" required>
+                    <input id="confirm" name="confirm" type="password" class="validate" required>
                     <label for="confirm">Пароль еще раз</label>
                     <span class="helper-text" data-error="Введите пароль"></span>
                 </div>

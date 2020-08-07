@@ -9,15 +9,19 @@ module.exports = [
         method: 'GET',
         path: `/${MODEL_NAME}`,
         handler: async function (request, h) {
+            request.auth.isAuthenticated = true;
             const courses = await Course.find();
             return h.view('courses',
                 {
                     title: 'Courses',
                     message: 'Tutorial',
+                    isCourses: true,
+                    isAuthenticated: request.auth.isAuthenticated,
                     courses
                 },
-                {layout:'Layout'}
+                {layout:'Layout'},
             )
+
         }
     },
     {

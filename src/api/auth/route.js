@@ -10,10 +10,20 @@ module.exports = [
             return h.view('auth/login',
                 {
                     title: 'login',
-                    message: 'Tutorial'
+                    message: 'Tutorial',
+                    isLogin: true
                 },
                 {layout:'Layout'}
             )
+        }
+    },
+    {
+        method: 'POST',
+        path: `/auth/${MODEL_NAME}`,
+        handler: function (request, h) {
+            request.auth.isAuthenticated = true;
+            //console.log(request.auth);
+            return h.redirect(`/`);
         }
     }
 ]

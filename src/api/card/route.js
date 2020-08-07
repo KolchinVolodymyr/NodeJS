@@ -34,6 +34,7 @@ module.exports = [
                 {
                     title: 'Card',
                     courses: courses,
+                    isCard: true,
                     price: computePrice(courses)
                 },
                 {layout:'Layout'}

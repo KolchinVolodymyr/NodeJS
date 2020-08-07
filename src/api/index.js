@@ -5,6 +5,7 @@ const _ = require('lodash');
 const path = require('path');
 const mongoose = require('mongoose');
 const User = require('./users/service');
+const varMiddleware = require('./middleware/variales')
 
 const config = {
     port: process.env.PORT || 8080,
@@ -33,12 +34,19 @@ async function start() {
             plugin: require('@hapi/vision')
         }
     ]);
+    //Setting cookie
+    server.state('session', {
+        ttl: 24 * 60 * 60 * 1000,     // One day
+        isSecure: true,
+        path: '/',
+        encoding: 'base64json'
+    });
 
     server.ext({
         type: 'onRequest',
         method: async function (request, h) {
             try {
-                const user = await User.findById('5f273f0833365d3314b8c1dd')
+                const user = await User.findById('5f273f0833365d3314b8c1dd');
                 request.user = user;
             } catch (e) {
                 console.log(e)
@@ -46,21 +54,36 @@ async function start() {
             return h.continue;
         }
     });
+
     //routes:
     await server.route([
         {
             method: 'GET',
             path: '/',
-            handler: function (request, h) {
+            //
+            options: {
+                state: {
+                    parse: true,            //The parse option determines if cookies are parsed and stored in request.state.
+                    failAction: 'error'     //The failAction options determines how cookie parsing errors will be handled.
+                }
+            },
+            handler: function async (request, h) {
+                h.state('session', {
+                    ttl: 24 * 60 * 60 * 1000,
+                    encoding: 'base64json',
+                });
+                console.log(request.state.data);
                 return h.view('index',
                     {
-                        title: 'Home'
+                        title: 'Home',
+                        isHome: true
                     },
                     {layout:'Layout'}
                 )
             }
         }
     ]);
+    //Serving Static Files
     await server.route({
         method: 'GET',
         path: '/{param*}',
@@ -71,6 +94,9 @@ async function start() {
             }
         }
     });
+
+
+
 
 
     server.views({
