@@ -24,7 +24,7 @@ module.exports = [
         method: 'GET',
         path: `/card`,
         handler: async function (request, h) {
-            request.user = await User.findById('5f273f0833365d3314b8c1dd');
+            request.user = await User.findById('5f5816b351c8d243ac929125');
             const user = await request.user
                 .populate('cart.items.courseId')
                 .execPopulate();

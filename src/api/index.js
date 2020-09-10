@@ -5,7 +5,28 @@ const _ = require('lodash');
 const path = require('path');
 const mongoose = require('mongoose');
 const User = require('./users/service');
-const varMiddleware = require('./middleware/variales')
+const bcrypt = require('bcryptjs');
+
+const users = {
+    john: {
+        username: 'john',
+        password: '$2a$10$iqJSHD.BGr0E2IxQwYgJmeP3NvhPrXAeLSaGCj6IR/XU5QtjVu5Tm',   // 'secret'
+        name: 'John Doe',
+        id: '2133d32a'
+    }
+};
+
+const validate = async (request, username, password) => {
+
+    const user = users[username];
+    if (!user) {
+        return { credentials: null, isValid: false };
+    }
+
+    const isValid = await bcrypt.compare(password, user.password);
+    const credentials = { id: user.id, name: user.name };
+    return { isValid, credentials };
+};
 
 const config = {
     port: process.env.PORT || 8080,
@@ -32,8 +53,24 @@ async function start() {
         },
         {
             plugin: require('@hapi/vision')
+        },
+        {
+            plugin: require('@hapi/basic')
         }
+
     ]);
+    server.auth.strategy('simple', 'basic', { validate });
+
+    server.route({
+        method: 'GET',
+        path: '/2',
+        options: {
+            auth: 'simple'
+        },
+        handler: function (request, h) {
+            return 'welcome';
+        }
+    });
     //Setting cookie
     server.state('session', {
         ttl: 24 * 60 * 60 * 1000,     // One day
@@ -46,7 +83,7 @@ async function start() {
         type: 'onRequest',
         method: async function (request, h) {
             try {
-                const user = await User.findById('5f273f0833365d3314b8c1dd');
+                const user = await User.findById('5f5816b351c8d243ac929125');
                 request.user = user;
             } catch (e) {
                 console.log(e)
@@ -60,7 +97,6 @@ async function start() {
         {
             method: 'GET',
             path: '/',
-            //
             options: {
                 state: {
                     parse: true,            //The parse option determines if cookies are parsed and stored in request.state.
@@ -72,7 +108,7 @@ async function start() {
                     ttl: 24 * 60 * 60 * 1000,
                     encoding: 'base64json',
                 });
-                console.log(request.state.data);
+                //console.log(isAuth);
                 return h.view('index',
                     {
                         title: 'Home',
@@ -94,10 +130,6 @@ async function start() {
             }
         }
     });
-
-
-
-
 
     server.views({
         engines: {
@@ -123,16 +155,18 @@ async function start() {
             useUnifiedTopology: true,
             useFindAndModify: false
         });
-        const candidate = await User.findOne()
+
+        const candidate = await User.findOne();
+
         if(!candidate) {
             const user = new User({
                 email: 'Volodymyr@gmail.com',
                 name: 'Volodymyr',
+                password: 'hashPassword',
                 cart: { items: []}
             })
             await user.save();
-
-        }
+         }
 
         server.start();
         console.log('Server running at:', server.info.uri);
