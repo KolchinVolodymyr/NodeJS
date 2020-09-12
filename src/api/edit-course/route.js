@@ -15,6 +15,7 @@ module.exports = [
                 {
                     title: 'Edit course',
                     message: 'Tutorial',
+                    isAuthenticated: request.auth.isAuthenticated,
                     course
                 },
                 {layout:'Layout'}

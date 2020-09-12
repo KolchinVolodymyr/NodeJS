@@ -9,8 +9,8 @@ module.exports = [
         method: 'GET',
         path: `/${MODEL_NAME}`,
         handler: async function (request, h) {
-            request.auth.isAuthenticated = true;
             const courses = await Course.find();
+
             return h.view('courses',
                 {
                     title: 'Courses',

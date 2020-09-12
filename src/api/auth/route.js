@@ -8,7 +8,7 @@ const bcrypt = require('bcryptjs');
 module.exports = [
     {
         method: 'GET',
-        path: `/auth/${MODEL_NAME}`,
+        path: `/auth/login`,
         handler:  function (request, h) {
             return h.view('auth/login',
                 {
@@ -18,6 +18,9 @@ module.exports = [
                 },
                 {layout:'Layout'}
             )
+        },
+        options: {
+            auth: false
         }
     },
     {
@@ -30,28 +33,31 @@ module.exports = [
 
                 if (candidate) {
                     const areSame = await bcrypt.compare(password, candidate.password)
-                    console.log('candidate',candidate);
-                    console.log('areSame',areSame);
-                    console.log('request.state',request.state);
                     if (areSame) {
-                        request.state.user = candidate
-                        request.state.isAuthenticated = true
-                        request.state.save(err => {
-                             if (err) {
-                                 throw err
-                             }
-                            return h.redirect('/');
-                            console.log('request.session.isAuthenticated',request.session.isAuthenticated);
-                            console.log('request.state',request.state);
-                         })
+
+                        //request.cookieAuth.clear();
+                        request.cookieAuth.set(candidate);
+                        request.auth.isAuthenticated = true;
+                        request.auth.isAuthorized = true;
+                        //console.log('request.auth',request.auth);
+                        return  h.redirect('/');
                     } else {
-                            return  h.redirect('/auth/login#login')
+                        //password
+                        console.log('Неверный пароль');
+                        return  h.redirect('/auth/login#login')
                     }
                 } else {
-                        return h.redirect('/auth/login#login')
+                    //User does not exist
+                    console.log('Такого пользователя не существует');
+                    return h.redirect('/auth/login#login')
                 }
             } catch (e) {
                 console.log(e)
+            }
+        },
+        options: {
+            auth: {
+                mode: 'required'
             }
         }
     },
@@ -78,5 +84,12 @@ module.exports = [
                 console.log(e)
             }
         }
-    }
+    },
+    // {
+    //     method: 'GET',
+    //     path: `/logout`,
+    //     handler: async function (request, h) {
+    //         //request.cookieAuth.clear();
+    //     }
+    // }
 ]

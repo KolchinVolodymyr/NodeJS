@@ -7,26 +7,14 @@ const mongoose = require('mongoose');
 const User = require('./users/service');
 const bcrypt = require('bcryptjs');
 
-const users = {
-    john: {
+const users = [
+    {
         username: 'john',
         password: '$2a$10$iqJSHD.BGr0E2IxQwYgJmeP3NvhPrXAeLSaGCj6IR/XU5QtjVu5Tm',   // 'secret'
         name: 'John Doe',
         id: '2133d32a'
     }
-};
-
-const validate = async (request, username, password) => {
-
-    const user = users[username];
-    if (!user) {
-        return { credentials: null, isValid: false };
-    }
-
-    const isValid = await bcrypt.compare(password, user.password);
-    const credentials = { id: user.id, name: user.name };
-    return { isValid, credentials };
-};
+];
 
 const config = {
     port: process.env.PORT || 8080,
@@ -55,45 +43,37 @@ async function start() {
             plugin: require('@hapi/vision')
         },
         {
-            plugin: require('@hapi/basic')
+            plugin: require('@hapi/cookie')
+        },
+        {
+            plugin: require('hapi-auth-bearer-token')
         }
 
     ]);
-    server.auth.strategy('simple', 'basic', { validate });
 
-    server.route({
-        method: 'GET',
-        path: '/2',
-        options: {
-            auth: 'simple'
+    //@hapi/cookie
+    server.auth.strategy('session60', 'cookie', {
+        cookie: {
+            name: 'sid-example',
+            password: '!wsYhFA*C2U6nz=Bu^%A@^F#SF3&kSR6',
+            isSecure: false
         },
-        handler: function (request, h) {
-            return 'welcome';
+        redirectTo: '/login',
+        validateFunc: async (request, session) => {
+            return { valid: true , credentials: session };
         }
     });
+    server.auth.default('session60');
     //Setting cookie
-    server.state('session', {
+    server.state('session60', {
         ttl: 24 * 60 * 60 * 1000,     // One day
         isSecure: true,
         path: '/',
         encoding: 'base64json'
     });
 
-    server.ext({
-        type: 'onRequest',
-        method: async function (request, h) {
-            try {
-                const user = await User.findById('5f5816b351c8d243ac929125');
-                request.user = user;
-            } catch (e) {
-                console.log(e)
-            }
-            return h.continue;
-        }
-    });
-
     //routes:
-    await server.route([
+    server.route([
         {
             method: 'GET',
             path: '/',
@@ -104,18 +84,73 @@ async function start() {
                 }
             },
             handler: function async (request, h) {
-                h.state('session', {
+                h.state('session60', {
                     ttl: 24 * 60 * 60 * 1000,
                     encoding: 'base64json',
                 });
-                //console.log(isAuth);
+                // console.log('request.auth',request.auth);
                 return h.view('index',
                     {
                         title: 'Home',
-                        isHome: true
+                        isHome: true,
+                        isAuthenticated: request.auth.isAuthenticated
                     },
                     {layout:'Layout'}
                 )
+            }
+        },
+        {
+            method: 'GET',
+            path: '/login',
+            handler: function (request, h) {
+
+                return ` <html>
+                            <head>
+                                <title>Login page</title>
+                            </head>
+                            <body>
+                                <h3>Please Log In</h3>
+                                <form method="post" action="/login">
+                                    Username: <input type="text" name="username"><br>
+                                    Password: <input type="password" name="password"><br/>
+                                <input type="submit" value="Login"></form>
+                            </body>
+                        </html>`;
+            },
+            options: {
+                auth: false
+            }
+        },
+        {
+            method: 'POST',
+            path: '/login',
+            handler: async (request, h) => {
+
+                const { username, password } = request.payload;
+                const account = users.find(
+                    (user) => user.username === username
+                );
+
+                if (!account || !(await bcrypt.compare(password, account.password))) {
+
+                    return h.view('/login');
+                }
+
+                request.cookieAuth.set(account);
+
+                return h.redirect('/');
+            },
+            options: {
+                auth: {
+                    mode: 'try'
+                }
+            }
+        },
+        {
+            method: 'GET',
+            path: `/logout`,
+            handler: async function (request, h) {
+                request.cookieAuth.clear();
             }
         }
     ]);
@@ -155,18 +190,6 @@ async function start() {
             useUnifiedTopology: true,
             useFindAndModify: false
         });
-
-        const candidate = await User.findOne();
-
-        if(!candidate) {
-            const user = new User({
-                email: 'Volodymyr@gmail.com',
-                name: 'Volodymyr',
-                password: 'hashPassword',
-                cart: { items: []}
-            })
-            await user.save();
-         }
 
         server.start();
         console.log('Server running at:', server.info.uri);

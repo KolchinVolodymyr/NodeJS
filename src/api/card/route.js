@@ -35,7 +35,8 @@ module.exports = [
                     title: 'Card',
                     courses: courses,
                     isCard: true,
-                    price: computePrice(courses)
+                    price: computePrice(courses),
+                    isAuthenticated: request.auth.isAuthenticated
                 },
                 {layout:'Layout'}
             )

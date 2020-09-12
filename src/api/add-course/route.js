@@ -13,7 +13,8 @@ module.exports = [
                 {
                     title: 'Courses add',
                     message: 'Tutorial',
-                    isAdd: true
+                    isAdd: true,
+                    isAuthenticated: request.auth.isAuthenticated
                 },
                 {layout:'Layout'}
             )
