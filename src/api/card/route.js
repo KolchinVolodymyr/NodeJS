@@ -23,6 +23,12 @@ module.exports = [
     {
         method: 'GET',
         path: `/card`,
+        options: {
+            auth: {
+                mode: 'try',
+                strategy: 'session60'
+            }
+        },
         handler: async function (request, h) {
             request.user = await User.findById('5f5816b351c8d243ac929125');
             const user = await request.user

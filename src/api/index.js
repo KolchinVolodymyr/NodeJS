@@ -4,17 +4,6 @@ const Hapi = require('hapi');
 const _ = require('lodash');
 const path = require('path');
 const mongoose = require('mongoose');
-const User = require('./users/service');
-const bcrypt = require('bcryptjs');
-
-const users = [
-    {
-        username: 'john',
-        password: '$2a$10$iqJSHD.BGr0E2IxQwYgJmeP3NvhPrXAeLSaGCj6IR/XU5QtjVu5Tm',   // 'secret'
-        name: 'John Doe',
-        id: '2133d32a'
-    }
-];
 
 const config = {
     port: process.env.PORT || 8080,
@@ -58,12 +47,13 @@ async function start() {
             password: '!wsYhFA*C2U6nz=Bu^%A@^F#SF3&kSR6',
             isSecure: false
         },
-        redirectTo: '/login',
+        redirectTo: false,
         validateFunc: async (request, session) => {
+
             return { valid: true , credentials: session };
         }
     });
-    server.auth.default('session60');
+
     //Setting cookie
     server.state('session60', {
         ttl: 24 * 60 * 60 * 1000,     // One day
@@ -78,6 +68,10 @@ async function start() {
             method: 'GET',
             path: '/',
             options: {
+                auth: {
+                    mode: 'try',
+                    strategy: 'session60'
+                },
                 state: {
                     parse: true,            //The parse option determines if cookies are parsed and stored in request.state.
                     failAction: 'error'     //The failAction options determines how cookie parsing errors will be handled.
@@ -97,60 +91,6 @@ async function start() {
                     },
                     {layout:'Layout'}
                 )
-            }
-        },
-        {
-            method: 'GET',
-            path: '/login',
-            handler: function (request, h) {
-
-                return ` <html>
-                            <head>
-                                <title>Login page</title>
-                            </head>
-                            <body>
-                                <h3>Please Log In</h3>
-                                <form method="post" action="/login">
-                                    Username: <input type="text" name="username"><br>
-                                    Password: <input type="password" name="password"><br/>
-                                <input type="submit" value="Login"></form>
-                            </body>
-                        </html>`;
-            },
-            options: {
-                auth: false
-            }
-        },
-        {
-            method: 'POST',
-            path: '/login',
-            handler: async (request, h) => {
-
-                const { username, password } = request.payload;
-                const account = users.find(
-                    (user) => user.username === username
-                );
-
-                if (!account || !(await bcrypt.compare(password, account.password))) {
-
-                    return h.view('/login');
-                }
-
-                request.cookieAuth.set(account);
-
-                return h.redirect('/');
-            },
-            options: {
-                auth: {
-                    mode: 'try'
-                }
-            }
-        },
-        {
-            method: 'GET',
-            path: `/logout`,
-            handler: async function (request, h) {
-                request.cookieAuth.clear();
             }
         }
     ]);

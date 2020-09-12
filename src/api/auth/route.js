@@ -1,6 +1,6 @@
 'use strict';
 
-const MODEL_NAME = 'login';
+//const MODEL_NAME = 'login';
 const User = require('../users/service');
 const bcrypt = require('bcryptjs');
 
@@ -8,8 +8,14 @@ const bcrypt = require('bcryptjs');
 module.exports = [
     {
         method: 'GET',
-        path: `/auth/login`,
-        handler:  function (request, h) {
+        path: '/login',
+        options: {
+            auth: {
+                mode: 'try',
+                strategy: 'session60'
+            }
+        },
+        handler: function (request, h) {
             return h.view('auth/login',
                 {
                     title: 'login',
@@ -18,24 +24,20 @@ module.exports = [
                 },
                 {layout:'Layout'}
             )
-        },
-        options: {
-            auth: false
         }
     },
     {
         method: 'POST',
-        path: `/auth/${MODEL_NAME}`,
-        handler: async function (request, h) {
+        path: '/login',
+        handler: async (request, h) => {
             try {
-                const {email, password} = request.payload;
-                const candidate = await User.findOne({ email });
+                const email  = request.payload.email;
+                const password = request.payload.password;
 
+                const candidate = await User.findOne({ email });
                 if (candidate) {
                     const areSame = await bcrypt.compare(password, candidate.password)
                     if (areSame) {
-
-                        //request.cookieAuth.clear();
                         request.cookieAuth.set(candidate);
                         request.auth.isAuthenticated = true;
                         request.auth.isAuthorized = true;
@@ -54,10 +56,12 @@ module.exports = [
             } catch (e) {
                 console.log(e)
             }
+
         },
         options: {
             auth: {
-                mode: 'required'
+                mode: 'try',
+                strategy: 'session60'
             }
         }
     },
@@ -85,11 +89,12 @@ module.exports = [
             }
         }
     },
-    // {
-    //     method: 'GET',
-    //     path: `/logout`,
-    //     handler: async function (request, h) {
-    //         //request.cookieAuth.clear();
-    //     }
-    // }
+    {
+        method: 'GET',
+        path: `/logout`,
+        handler: async function (request, h) {
+            request.cookieAuth.clear();
+            return h.redirect('/login')
+        }
+    }
 ]

@@ -49,12 +49,12 @@
                     <li><a href="/orders">Заказы</a></li>
                 {{/if}}
 
-                <li><a href="/auth/logout">Выйти</a></li>
+                <li><a href="/logout">Выйти</a></li>
             {{else}}
                 {{#if isLogin}}
-                    <li class="active"><a href="/auth/login#login">Войти</a></li>
+                    <li class="active"><a href="/login#login">Войти</a></li>
                 {{else}}
-                    <li><a href="/auth/login#login">Войти</a></li>
+                    <li><a href="/login#login">Войти</a></li>
                 {{/if}}
             {{/if}}
         </ul>

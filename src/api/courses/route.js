@@ -8,6 +8,12 @@ module.exports = [
     {
         method: 'GET',
         path: `/${MODEL_NAME}`,
+        options: {
+            auth: {
+                mode: 'try',
+                strategy: 'session60'
+            }
+        },
         handler: async function (request, h) {
             const courses = await Course.find();
 
@@ -27,6 +33,12 @@ module.exports = [
     {
         method: 'GET',
         path: `/${MODEL_NAME}/{id}`,
+        options: {
+            auth: {
+                mode: 'try',
+                strategy: 'session60'
+            }
+        },
         handler: async function (request, h) {
             const course = await Course.findById(request.params.id);
             return h.view('course',
