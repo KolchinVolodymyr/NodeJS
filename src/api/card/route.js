@@ -44,7 +44,8 @@ module.exports = [
                     price: computePrice(courses),
                     isAuthenticated: request.auth.isAuthenticated
                 },
-                {layout:'Layout'}
+                {layout:'Layout'},
+                //console.log('request.auth',request.auth)
             )
 
         }
@@ -54,6 +55,9 @@ module.exports = [
         path: `/${MODEL_NAME}/add`,
         handler: async function (request, h) {
             const course = await Course.findById(request.payload.id);
+            //await User.findById(request.session.user._id);
+            //console.log('User',User);
+            //console.log('POST request.auth',request.auth);
             await request.user.addToCart(course);
             return h.redirect(`/${MODEL_NAME}`);
         }

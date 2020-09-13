@@ -45,6 +45,7 @@ module.exports = [
                 {
                     title: `Courses ${course.title}` ,
                     message: 'Tutorial',
+                    isAuthenticated: request.auth.isAuthenticated,
                     course
                 },
                 {layout:'Layout'}

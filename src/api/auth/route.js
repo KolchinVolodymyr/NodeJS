@@ -39,8 +39,8 @@ module.exports = [
                     const areSame = await bcrypt.compare(password, candidate.password)
                     if (areSame) {
                         request.cookieAuth.set(candidate);
-                        request.auth.isAuthenticated = true;
-                        request.auth.isAuthorized = true;
+                        // request.auth.isAuthenticated = true;
+                        // request.auth.isAuthorized = true;
                         //console.log('request.auth',request.auth);
                         return  h.redirect('/');
                     } else {
