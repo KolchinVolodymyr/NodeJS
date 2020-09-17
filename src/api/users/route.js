@@ -8,6 +8,12 @@ module.exports = [
     {
         method: 'GET',
         path: `/${MODEL_NAME}`,
+        options: {
+            auth: {
+                mode: 'try',
+                strategy: 'session60'
+            }
+        },
         handler: function (request, h) {
             return h.view('users',
                 {

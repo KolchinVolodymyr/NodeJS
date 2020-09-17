@@ -31,6 +31,12 @@ module.exports = [
     {
         method: 'POST',
         path: `/${MODEL_NAME}/edit`,
+        options: {
+            auth: {
+                mode: 'try',
+                strategy: 'session60'
+            }
+        },
         handler: async function (request, h) {
             try {
                 await Course.findByIdAndUpdate(request.payload.id, request.payload);
@@ -43,6 +49,12 @@ module.exports = [
     {
         method: 'POST',
         path: `/${MODEL_NAME}/remove`,
+        options: {
+            auth: {
+                mode: 'try',
+                strategy: 'session60'
+            }
+        },
         handler: async function (request, h) {
             try {
                 await Course.deleteOne({_id: request.payload.id});
