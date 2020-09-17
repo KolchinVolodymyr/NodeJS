@@ -22,7 +22,7 @@ function computePrice(courses) {
 module.exports = [
     {
         method: 'GET',
-        path: `/card`,
+        path: `/${MODEL_NAME}`,
         options: {
             auth: {
                 mode: 'try',
@@ -30,11 +30,10 @@ module.exports = [
             }
         },
         handler: async function (request, h) {
-            request.user = await User.findById('5f5816b351c8d243ac929125');
+            request.user = await User.findById(request.auth.credentials._id);
             const user = await request.user
                 .populate('cart.items.courseId')
                 .execPopulate();
-
             const courses = mapCartItems(user.cart)
             return h.view('card',
                 {
@@ -42,22 +41,26 @@ module.exports = [
                     courses: courses,
                     isCard: true,
                     price: computePrice(courses),
-                    isAuthenticated: request.auth.isAuthenticated
-                },
-                {layout:'Layout'},
-                //console.log('request.auth',request.auth)
-            )
+                    isAuthenticated: request.auth.isAuthenticated,
 
+                },
+                {layout:'Layout'}
+            )
         }
     },
     {
         method: 'POST',
         path: `/${MODEL_NAME}/add`,
+        options: {
+            auth: {
+                mode: 'try',
+                strategy: 'session60'
+            }
+        },
         handler: async function (request, h) {
+            request.user = await User.findById(request.auth.credentials._id);
             const course = await Course.findById(request.payload.id);
-            //await User.findById(request.session.user._id);
-            //console.log('User',User);
-            //console.log('POST request.auth',request.auth);
+
             await request.user.addToCart(course);
             return h.redirect(`/${MODEL_NAME}`);
         }
@@ -65,18 +68,21 @@ module.exports = [
     {
         method: 'DELETE',
         path: `/${MODEL_NAME}/remove/{id}`,
+        options: {
+            auth: {
+                mode: 'try',
+                strategy: 'session60'
+            }
+        },
         handler: async function (request, h) {
+            request.user = await User.findById(request.auth.credentials._id);
             await request.user.removeFromCart(request.params.id)
-            
             const user = await request.user.populate('cart.items.courseId').execPopulate()
             const courses = mapCartItems(user.cart)
             const cart = {
                 courses, price: computePrice(courses)
             }
             return h.response(cart).code(200);
-
         }
     }
-
-
 ]

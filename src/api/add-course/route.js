@@ -3,6 +3,7 @@
 const MODEL_NAME = 'add-course';
 
 const Course = require('./service');
+const Boom = require('@hapi/boom');
 
 module.exports = [
     {
@@ -29,6 +30,12 @@ module.exports = [
     {
         method: 'POST',
         path: `/${MODEL_NAME}`,
+        options: {
+            auth: {
+                mode: 'try',
+                strategy: 'session60'
+            }
+        },
         handler: async function (request, h) {
             const course = new Course({
                 title: request.payload.title,

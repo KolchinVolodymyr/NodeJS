@@ -32,9 +32,12 @@ module.exports = [
         method: 'POST',
         path: `/${MODEL_NAME}/edit`,
         handler: async function (request, h) {
-            await Course.findByIdAndUpdate(request.payload.id, request.payload);
-            return h.redirect(`/${MODEL_NAME}`);
-
+            try {
+                await Course.findByIdAndUpdate(request.payload.id, request.payload);
+                return h.redirect(`/${MODEL_NAME}`);
+            } catch (e){
+                console.log(e);
+            }
         }
     },
     {
@@ -47,9 +50,6 @@ module.exports = [
             } catch (e){
                 console.log(e);
             }
-
-
         }
     }
-
 ]

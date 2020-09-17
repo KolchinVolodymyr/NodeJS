@@ -6,6 +6,7 @@ const path = require('path');
 const User = require('../api/users/service');
 const mongoose = require('mongoose');
 
+
 const config = {
     port: process.env.PORT || 8080,
     routes: {
@@ -36,30 +37,16 @@ async function start() {
             plugin: require('@hapi/cookie')
         },
         {
-            plugin: require('hapi-auth-jwt2')
+            plugin: require('../api/middleware/variales')
         }
 
     ]);
-// bring your own validation function
-    const validate = async function (decoded, request, h) {
 
-        // do your checks to see if the person is valid
-        // if (!people[decoded.id]) {
-        //     return { isValid: false };
-        // }
-        // else {
-            return { isValid: true };
-        // }
-    };
-    server.auth.strategy('jwt', 'jwt',
-        { key: 'NeverShareYourSecret', // Never Share your secret key
-            validate  // validate function defined above
-        });
-    server.auth.default('jwt');
     //@hapi/cookie
     server.auth.strategy('session60', 'cookie', {
         cookie: {
-            name: 'sid-example',
+            name: 'sidExample',
+            ttl: 168 * 60 * 60 * 1000,
             password: '!wsYhFA*C2U6nz=Bu^%A@^F#SF3&kSR6',
             isSecure: false
         },
@@ -72,51 +59,35 @@ async function start() {
 
     //Setting cookie
     server.state('session60', {
-        ttl: 24 * 60 * 60 * 1000,     // One day
+        ttl: 168 * 60 * 60 * 1000,     // One day
         isSecure: true,
         path: '/',
-        encoding: 'base64json'
+        encoding: 'base64json',
     });
 
     server.ext({
-        type: 'onRequest',
+        type: 'onCredentials',
         method: async function (request, h) {
             try {
-                //await console.log('request.cookieAuth',request.cookieAuth);
-                const user = await User.findById('5f5816b351c8d243ac929125');
-                request.user = user;
-
+                const cookie = request.headers.cookie || '',
+                    token = cookie.split(/;+/).filter((str)=>{
+                        return str.indexOf('sidExample') ===0
+                    }),
+                    authorization = _.get(token, '0', ''),
+                    parts = authorization.split(/=+/);
+                if(parts[1]) {
+                    request.headers['autorization'] = `Bearer ${parts[1]}`;
+                }
+                return h.continue;
             } catch (e) {
                 console.log(e)
             }
-            return h.continue;
+
         }
     });
+
     //routes:
     server.route([
-        {
-            method: "GET",
-            path: "/2",
-            config: { auth: false },
-            handler: function(request, h) {
-                return {text: 'Token not required'};
-            }
-        },
-        {
-            method: 'GET',
-            path: '/restricted',
-            options: {
-                auth: {
-                    strategy: 'jwt'
-                }
-            },
-            handler: function(request, h) {
-                 const response = h.response({text: 'You used a Token! desktop-hsg40jn:8080/restricted?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6MSwibmFtZSI6IkFudGhvbnkgVmFsaWQgVXNlciIsImlhdCI6MTQyNTQ3MzUzNX0.KA68l60mjiC8EXaC2odnjFwdIDxE__iDu5RwLdN1F2A'});
-                 response.header("Authorization", request.headers.authorization);
-                 console.log('response.header',response.header.authorization);
-                 return response;
-            }
-        },
         {
             method: 'GET',
             path: '/',
@@ -131,15 +102,13 @@ async function start() {
                     ttl: 24 * 60 * 60 * 1000,
                     encoding: 'base64json',
                 });
-                // console.log('request.auth',request.auth);
                 return h.view('index',
                     {
                         title: 'Home',
                         isHome: true,
                         isAuthenticated: request.auth.isAuthenticated
                     },
-                    {layout:'Layout'},
-                    console.log('isHome: request.auth',request.auth)
+                    {layout:'Layout'}
                 )
             }
         }

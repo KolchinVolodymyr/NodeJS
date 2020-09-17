@@ -1,7 +1,6 @@
 'use strict';
 
 const MODEL_NAME = 'courses';
-
 const Course = require('../add-course/service');
 
 module.exports = [
@@ -52,5 +51,4 @@ module.exports = [
             )
         }
     }
-
 ]
