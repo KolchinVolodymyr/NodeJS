@@ -76,12 +76,12 @@ module.exports = [
         },
         handler: async function (request, h) {
             request.user = await User.findById(request.auth.credentials._id);
-            await request.user.removeFromCart(request.params.id)
-            const user = await request.user.populate('cart.items.courseId').execPopulate()
-            const courses = mapCartItems(user.cart)
+            await request.user.removeFromCart(request.params.id);
+            const user = await request.user.populate('cart.items.courseId').execPopulate();
+            const courses = mapCartItems(user.cart);
             const cart = {
                 courses, price: computePrice(courses)
-            }
+            };
             return h.response(cart).code(200);
         }
     }

@@ -18,7 +18,7 @@ module.exports = [
             return h.view('users',
                 {
                     title: 'Using handlebars in Hapi',
-                    message: 'Tutorial'
+                    //message: 'Tutorial'
                 },
                 {layout:'usersLayout'}
             )

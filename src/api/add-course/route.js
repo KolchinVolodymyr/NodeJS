@@ -19,7 +19,6 @@ module.exports = [
             return h.view('add',
                 {
                     title: 'Courses add',
-                    message: 'Tutorial',
                     isAdd: true,
                     isAuthenticated: request.auth.isAuthenticated
                 },
