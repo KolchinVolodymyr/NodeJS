@@ -25,7 +25,7 @@ module.exports = [
         path: `/${MODEL_NAME}`,
         options: {
             auth: {
-                mode: 'try',
+                mode: 'required',
                 strategy: 'session60'
             }
         },
@@ -53,7 +53,7 @@ module.exports = [
         path: `/${MODEL_NAME}/add`,
         options: {
             auth: {
-                mode: 'try',
+                mode: 'required',
                 strategy: 'session60'
             }
         },
@@ -70,7 +70,7 @@ module.exports = [
         path: `/${MODEL_NAME}/remove/{id}`,
         options: {
             auth: {
-                mode: 'try',
+                mode: 'required',
                 strategy: 'session60'
             }
         },

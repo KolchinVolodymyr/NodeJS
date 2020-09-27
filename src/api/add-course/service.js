@@ -13,7 +13,8 @@ const courseSchema = new Schema({
     img: String,
     userId: {
         type: Schema.Types.ObjectId,
-        ref: 'User'
+        ref: 'User',
+        required: true
     }
 })
 

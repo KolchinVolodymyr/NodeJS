@@ -20,7 +20,7 @@ exports.plugin = {
                 password: '!wsYhFA*C2U6nz=Bu^%A@^F#SF3&kSR6',
                 isSecure: false
             },
-            redirectTo: false,
+            redirectTo: '/login',
             validateFunc: async (request, session) => {
 
                 return { valid: true , credentials: session };

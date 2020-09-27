@@ -3,6 +3,7 @@
 const Hapi = require('hapi');
 const _ = require('lodash');
 const path = require('path');
+const User = require('../api/users/service');
 
 const config = {
     port: process.env.PORT || 8080,

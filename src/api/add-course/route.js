@@ -11,7 +11,7 @@ module.exports = [
         path: `/${MODEL_NAME}`,
         options: {
             auth: {
-                mode: 'try',
+                mode: 'required',
                 strategy: 'session60'
             }
         },
@@ -31,7 +31,7 @@ module.exports = [
         path: `/${MODEL_NAME}`,
         options: {
             auth: {
-                mode: 'try',
+                mode: 'required',
                 strategy: 'session60'
             }
         },
@@ -40,7 +40,7 @@ module.exports = [
                 title: request.payload.title,
                 price: request.payload.price,
                 img: request.payload.img,
-                userId: request.user
+                userId: request.auth.credentials._id
             });
 
             course.save();
