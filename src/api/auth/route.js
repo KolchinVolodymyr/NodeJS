@@ -3,7 +3,8 @@
 const MODEL_NAME = 'login';
 const User = require('../users/service');
 const bcrypt = require('bcryptjs');
-const regEmail = require('./service')
+const crypto = require('crypto');
+const regEmail = require('./service');
 const Nodemailer = require('nodemailer');
 const postmarkTransport = require('nodemailer-postmark-transport');
 
@@ -12,6 +13,22 @@ const transport = Nodemailer.createTransport(postmarkTransport({
         apiKey: 'b6eae292-0d5d-4330-bd2d-859f8bd1971c'
     }
 }));
+
+function resetEmail(email, token) {
+    return {
+        from: 'admin@volodymyrkolchin.ru', //email
+        to: 'admin@volodymyrkolchin.ru',
+        subject: 'Восстановление доступа',
+        html: `
+      <h1>Вы забыли пароль?</h1>
+      <p>Если нет, то проигнорируйте данное письмо</p>
+      <p>Иначе нажмите на ссылку ниже:</p>
+      <p><a href="http://desktop-hsg40jn:8080/password/${token}">Восстановить доступ</a></p>
+      <hr />
+      <a href="http://desktop-hsg40jn:8080/">Магазин курсов</a>
+    `
+    }
+}
 
 module.exports = [
     {
@@ -28,7 +45,7 @@ module.exports = [
             return h.view('auth/login',
                 {
                     title: 'login',
-                    message: 'Tutorial',
+                    //message: 'Tutorial',
                     isLogin: true
                 },
                 {layout:'Layout'}
@@ -120,6 +137,134 @@ module.exports = [
                 return h.redirect('/login')
             } catch (e){
                 console.log(e);
+            }
+        }
+    },
+    {
+        method: 'GET',
+        path: `/reset`,
+        options: {
+            auth: {
+                mode: 'try',
+                strategy: 'session60'
+            }
+        },
+        handler: function (request, h) {
+
+            return h.view('auth/reset',
+                {
+                    title: 'Reset'
+                },
+                {layout:'Layout'}
+            )
+        }
+    },
+    {
+        method: 'POST',
+        path: `/reset`,
+        options: {
+            auth: {
+                mode: 'try',
+                strategy: 'session60'
+            }
+        },
+        handler: function (request, h) {
+            try {
+                crypto.randomBytes(32, async (err, buffer) => {
+                    if(err) {
+                        console.log('error', err);
+                        return h.redirect('/login');
+                    }
+
+                    const token = buffer.toString('hex');
+                    const candidate = await User.findOne({email: request.payload.email}); //looking for email in the database
+                    if (candidate) {
+                        candidate.resetToken = token;
+                        candidate.resetTokenExp = Date.now() + 60 * 60 * 1000;
+                        await candidate.save();
+                        //console.log('token', candidate.resetToken)
+                        //await transport.sendMail(resetEmail(candidate.email, candidate.resetToken)); //sending mail
+                        //return h.redirect('/login');
+                    } else {
+                        console.log('такой Email не зарегистирован');
+                        //return h.redirect('/login');
+                    }
+                })
+            return h.redirect('/login');
+            } catch (e) {
+                console.log(e)
+            }
+        }
+    },
+    {
+        method: 'GET',
+        path: `/password/{token}`,
+        options: {
+            auth: {
+                mode: 'try',
+                strategy: 'session60'
+            }
+        },
+        handler:async function (request, h) {
+            if (!request.params.token) {
+                return h.redirect('/login')
+            }
+
+            try {
+                const user = await User.findOne({
+                    resetToken: request.params.token,
+                    resetTokenExp: {$gt: Date.now()}
+                })
+
+                if (!user) {
+                    return h.redirect('/login')
+                } else {
+                    return h.view('auth/password',
+                        {
+                            title: 'Password',
+                            userId: user._id.toString(),
+                            token: request.params.token
+                        },
+                        {layout:'Layout'}
+                    )
+                }
+            } catch (e) {
+                console.log(e)
+            }
+
+        }
+    },
+    {
+        method: 'POST',
+        path: `/password`,
+        options: {
+            auth: {
+                mode: 'try',
+                strategy: 'session60'
+            }
+        },
+        handler: async function (request, h) {
+            try {
+                const user = await User.findOne({
+                    _id: request.payload.userId,
+                    resetToken: request.payload.token,
+                    resetTokenExp: {$gt: Date.now()}
+                })
+
+                if (user) {
+                    user.password = await bcrypt.hash(request.payload.password, 10);
+                    user.resetToken = undefined;
+                    user.resetTokenExp = undefined;
+                    await user.save();
+                    return h.redirect('/login');
+                } else {
+                    console.log('Время жизни токена истекло');
+                    return h.redirect('/login');
+                }
+
+                return h.redirect('/login');
+            } catch (e) {
+                console.log(e)
             }
         }
     }
