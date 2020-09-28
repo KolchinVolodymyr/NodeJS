@@ -3,7 +3,6 @@
 const Hapi = require('hapi');
 const _ = require('lodash');
 const path = require('path');
-const User = require('../api/users/service');
 
 const config = {
     port: process.env.PORT || 8080,
@@ -50,6 +49,9 @@ async function start() {
             plugin: require('./plugins/loadAllRoutes')
         },
         // {
+        //     plugin: require('./plugins/emailPostmark')
+        // },
+        // {
         //     plugin: require('./plugins/layoutHandlebars')
         // }
 
@@ -66,11 +68,17 @@ async function start() {
                     strategy: 'session60'
                 }
             },
-            handler: function (request, h) {
+            handler:async function (request, h) {
                 h.state('session60', {
                     ttl: 24 * 60 * 60 * 1000,
                     encoding: 'base64json',
                 });
+                // try {
+                //     const info = await transport.sendMail(mail);
+                //     console.log(info);
+                // } catch (err) {
+                //     console.error(err);
+                // }
                 return h.view('index',
                     {
                         title: 'Home',

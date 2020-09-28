@@ -5,6 +5,7 @@ const MODEL_NAME = 'add-course';
 const Course = require('./service');
 const Boom = require('@hapi/boom');
 
+
 module.exports = [
     {
         method: 'GET',
@@ -16,6 +17,7 @@ module.exports = [
             }
         },
         handler:  function (request, h) {
+
             return h.view('add',
                 {
                     title: 'Courses add',

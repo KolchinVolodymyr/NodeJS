@@ -3,6 +3,15 @@
 const MODEL_NAME = 'login';
 const User = require('../users/service');
 const bcrypt = require('bcryptjs');
+const regEmail = require('./service')
+const Nodemailer = require('nodemailer');
+const postmarkTransport = require('nodemailer-postmark-transport');
+
+const transport = Nodemailer.createTransport(postmarkTransport({
+    auth: {
+        apiKey: 'b6eae292-0d5d-4330-bd2d-859f8bd1971c'
+    }
+}));
 
 module.exports = [
     {
@@ -47,6 +56,7 @@ module.exports = [
                     if (areSame) {
                         request.cookieAuth.set(candidate);
                         return  h.redirect('/');
+
                     } else {
                         //password
                         console.log('Неверный пароль');
@@ -86,8 +96,9 @@ module.exports = [
                         email, name, password: hashPassword, cart: {items: []}
                     })
                     await user.save();
+                    await transport.sendMail(regEmail(email)); //sending mail
+                    return h.redirect('/login#login');
 
-                    return h.redirect('/login#login')
                 }
             } catch (e) {
                 console.log(e)
