@@ -73,12 +73,6 @@ async function start() {
                     ttl: 24 * 60 * 60 * 1000,
                     encoding: 'base64json',
                 });
-                // try {
-                //     const info = await transport.sendMail(mail);
-                //     console.log(info);
-                // } catch (err) {
-                //     console.error(err);
-                // }
                 return h.view('index',
                     {
                         title: 'Home',

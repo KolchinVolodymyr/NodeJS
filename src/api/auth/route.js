@@ -4,7 +4,7 @@ const MODEL_NAME = 'login';
 const User = require('../users/service');
 const bcrypt = require('bcryptjs');
 const crypto = require('crypto');
-const regEmail = require('./service');
+const {regEmail, resetEmail} = require('./service');
 const Nodemailer = require('nodemailer');
 const postmarkTransport = require('nodemailer-postmark-transport');
 
@@ -13,22 +13,6 @@ const transport = Nodemailer.createTransport(postmarkTransport({
         apiKey: 'b6eae292-0d5d-4330-bd2d-859f8bd1971c'
     }
 }));
-
-function resetEmail(email, token) {
-    return {
-        from: 'admin@volodymyrkolchin.ru', //email
-        to: 'admin@volodymyrkolchin.ru',
-        subject: 'Восстановление доступа',
-        html: `
-      <h1>Вы забыли пароль?</h1>
-      <p>Если нет, то проигнорируйте данное письмо</p>
-      <p>Иначе нажмите на ссылку ниже:</p>
-      <p><a href="http://desktop-hsg40jn:8080/password/${token}">Восстановить доступ</a></p>
-      <hr />
-      <a href="http://desktop-hsg40jn:8080/">Магазин курсов</a>
-    `
-    }
-}
 
 module.exports = [
     {
@@ -183,8 +167,8 @@ module.exports = [
                         candidate.resetTokenExp = Date.now() + 60 * 60 * 1000;
                         await candidate.save();
                         //console.log('token', candidate.resetToken)
-                        //await transport.sendMail(resetEmail(candidate.email, candidate.resetToken)); //sending mail
-                        //return h.redirect('/login');
+                        await transport.sendMail(resetEmail(candidate.email, candidate.resetToken)); //sending mail
+                        return h.redirect('/login');
                     } else {
                         console.log('такой Email не зарегистирован');
                         //return h.redirect('/login');
@@ -221,7 +205,7 @@ module.exports = [
                 } else {
                     return h.view('auth/password',
                         {
-                            title: 'Password',
+                            title: 'NEW Password',
                             userId: user._id.toString(),
                             token: request.params.token
                         },
