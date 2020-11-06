@@ -8,6 +8,9 @@
         </div>
         <div id="login" class="col s6 offset-s3">
             <h1>Войти в магазин</h1>
+            {{#if error}}
+                <p>{{error}}</p>
+            {{/if}}
             <form method="post" action="/login">
                 <div class="input-field">
                     <input id="email" type="email" name="email" class="validate"  required>
@@ -24,8 +27,11 @@
             </form>
         </div>
         <div id="register" class="col s6 offset-s3">
-            <h1>Создать аккаунт</h1>
-            <form action="/register" method="post">
+            <h1>Создать аккаунт </h1>
+            {{#if error}}
+                <p>{{error}}</p>
+            {{/if}}
+            <form action="/register" method="post" novalidate>
                 <div class="input-field">
                     <input id="remail" name="email" type="email" class="validate" required>
                     <label for="remail">Email</label>

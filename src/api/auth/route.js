@@ -1,6 +1,7 @@
 'use strict';
 
 const MODEL_NAME = 'login';
+const Joi = require('@hapi/joi');
 const User = require('../users/service');
 const bcrypt = require('bcryptjs');
 const crypto = require('crypto');
@@ -29,7 +30,6 @@ module.exports = [
             return h.view('auth/login',
                 {
                     title: 'login',
-                    //message: 'Tutorial',
                     isLogin: true
                 },
                 {layout:'Layout'}
@@ -59,14 +59,18 @@ module.exports = [
                         return  h.redirect('/');
 
                     } else {
-                        //password
-                        console.log('Неверный пароль');
-                        return  h.redirect('/auth/login#login')
+                        request.payload.message = 'Неверный пароль';
+                        return h.view('auth/login', {
+                            title: 'login',
+                            error  : request.payload.message // error object used in html template
+                        },{layout:'Layout'}).takeover();
                     }
                 } else {
-                    //User does not exist
-                    console.log('Такого пользователя не существует');
-                    return h.redirect('/auth/login#login')
+                    request.payload.message = 'Такой Email не зарегистирован.';
+                    return h.view('auth/login', {
+                        title: 'login',
+                        error  : request.payload.message // error object used in html template
+                    },{layout:'Layout'}).takeover();
                 }
             } catch (e) {
                 console.log(e)
@@ -78,19 +82,17 @@ module.exports = [
     {
         method: 'POST',
         path: `/register`,
-        options: {
-            auth: {
-                mode: 'try',
-                strategy: 'session60'
-            }
-        },
         handler: async function (request, h) {
             try {
-                const {email, password, repeat, name} = request.payload;
+                const {email, password, confirm, name} = request.payload;
                 const candidate = await User.findOne({email}); //looking for email in the database
 
                 if (candidate) { //user with this email already exists
-                    return h.redirect('/login#register')
+                    request.payload.message = 'Такой Email уже зарегистрирован. Введите другой Email.';
+                    return h.view('auth/login', {
+                        title: 'login',
+                        error  : request.payload.message, // error object used in html template
+                    },{layout:'Layout'}).takeover();
                 } else {
                     const hashPassword = await bcrypt.hash(password, 10)
                     const user = new User({
@@ -103,6 +105,39 @@ module.exports = [
                 }
             } catch (e) {
                 console.log(e)
+            }
+        },
+        options: {
+            auth: {
+                mode: 'try',
+                strategy: 'session60'
+            },
+            validate: {
+                payload: Joi.object({
+                    email: Joi.string().email().required().error(new Error('Введите корректный email')),
+                    password: Joi.string().min(3).max(8).required(),
+                    confirm: Joi.string().valid(Joi.ref('password')).required().error(new Error('Пароль не совпадает, Повторите еще раз')),
+                }),
+                options: {
+                    allowUnknown: true,
+                },
+                failAction: (request, h, err) => {
+                    if (!request.payload.password) {
+                        err.output.payload.message = 'Password is empty';
+                    }
+                    if (request.payload.password.length > 1 && request.payload.password.length < 3) {
+                        err.output.payload.message = 'Passw has less than 3 characters';
+                    }
+                    if (request.payload.password.length > 8) {
+                        err.output.payload.message = 'Pass has more than 8 ch';
+                    }
+
+                    return h.view('auth/login', {
+                        title: 'login',
+                        error  : err.output.payload.message // error object used in html template
+                    },{layout:'Layout'}).takeover();
+
+                }
             }
         }
     },
@@ -134,7 +169,6 @@ module.exports = [
             }
         },
         handler: function (request, h) {
-
             return h.view('auth/reset',
                 {
                     title: 'Reset'
@@ -150,31 +184,42 @@ module.exports = [
             auth: {
                 mode: 'try',
                 strategy: 'session60'
+            },
+            validate: {
+                payload: Joi.object({
+                    email: Joi.string().email().required().error(new Error('Введите корректный email'))
+                }),
+                options: {
+                    allowUnknown: true,
+                },
+                failAction: (request, h, err) => {
+
+                    return h.view('auth/reset', {
+                        title: 'Reset',
+                        error  : err.output.payload.message // error object used in html template
+                    },{layout:'Layout'}).takeover();
+
+                }
             }
         },
-        handler: function (request, h) {
+        handler: async function (request, h) {
             try {
-                crypto.randomBytes(32, async (err, buffer) => {
-                    if(err) {
-                        console.log('error', err);
-                        return h.redirect('/login');
-                    }
+                const token = crypto.randomBytes(32).toString('hex'); //генерация токена
+                const candidate = await User.findOne({email: request.payload.email}); //looking for email in the database
+                if (candidate) {
+                    candidate.resetToken = token;
+                    candidate.resetTokenExp = Date.now() + 60 * 60 * 1000;
+                    await candidate.save();
 
-                    const token = buffer.toString('hex');
-                    const candidate = await User.findOne({email: request.payload.email}); //looking for email in the database
-                    if (candidate) {
-                        candidate.resetToken = token;
-                        candidate.resetTokenExp = Date.now() + 60 * 60 * 1000;
-                        await candidate.save();
-                        //console.log('token', candidate.resetToken)
-                        await transport.sendMail(resetEmail(candidate.email, candidate.resetToken)); //sending mail
-                        return h.redirect('/login');
-                    } else {
-                        console.log('такой Email не зарегистирован');
-                        //return h.redirect('/login');
-                    }
-                })
-            return h.redirect('/login');
+                    await transport.sendMail(resetEmail(candidate.email, candidate.resetToken)); //sending mail
+                    return h.redirect('/login');
+                } else {
+                    return h.view('auth/reset', {
+                        title: 'Reset',
+                        error  : 'Такой Email не зарегистирован.' // error object used in html template
+                    },{layout:'Layout'}).takeover();
+                }
+                return h.redirect('/login');
             } catch (e) {
                 console.log(e)
             }
@@ -201,7 +246,10 @@ module.exports = [
                 })
 
                 if (!user) {
-                    return h.redirect('/login')
+                    return h.view('auth/login', {
+                        title: 'Login',
+                        error  : 'Время жизни токена истекло',// error object used in html template
+                    },{layout:'Layout'}).takeover();
                 } else {
                     return h.view('auth/password',
                         {
@@ -242,8 +290,7 @@ module.exports = [
                     await user.save();
                     return h.redirect('/login');
                 } else {
-                    console.log('Время жизни токена истекло');
-                    return h.redirect('/login');
+                     return h.redirect('/login');
                 }
 
                 return h.redirect('/login');

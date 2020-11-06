@@ -25,6 +25,9 @@ async function start() {
     // register plugins to server instance
     await server.register([
         {
+            plugin: require('./plugins/hapiFlash')
+        },
+        {
             plugin: require('inert')
         },
         {
@@ -47,7 +50,7 @@ async function start() {
         },
         {
             plugin: require('./plugins/loadAllRoutes')
-        },
+        }
         // {
         //     plugin: require('./plugins/emailPostmark')
         // },
