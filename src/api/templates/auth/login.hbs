@@ -11,7 +11,7 @@
             {{#if error}}
                 <p>{{error}}</p>
             {{/if}}
-            <form method="post" action="/login">
+            <form method="post" action="/login" novalidate>
                 <div class="input-field">
                     <input id="email" type="email" name="email" class="validate"  required>
                     <label for="email">Email</label>

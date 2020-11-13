@@ -38,17 +38,10 @@ module.exports = [
     },
     {
         method: 'POST',
-        path: `/${MODEL_NAME}`,
-        options: {
-            auth: {
-                mode: 'try',
-                strategy: 'session60'
-            }
-        },
+        path: `/login`,
         handler: async (request, h) => {
             try {
-                const email  = request.payload.email;
-                const password = request.payload.password;
+                const {email, password} = request.payload;
 
                 const candidate = await User.findOne({ email });
 
@@ -75,8 +68,27 @@ module.exports = [
             } catch (e) {
                 console.log(e)
             }
-
-
+        },
+        options: {
+            auth: {
+                mode: 'try',
+                strategy: 'session60'
+            },
+            validate: {
+                payload: Joi.object({
+                    email: Joi.string().email().required().error(new Error('Введите корректный email')),
+                    password: Joi.string().min(3).max(8).required()
+                }),
+                options: {
+                    allowUnknown: true,
+                },
+                failAction: (request, h, err) => {
+                    return h.view('auth/login', {
+                        title: 'login',
+                        error  : err.output.payload.message // error object used in html template
+                    },{layout:'Layout'}).takeover();
+                }
+            }
         }
     },
     {
@@ -84,7 +96,7 @@ module.exports = [
         path: `/register`,
         handler: async function (request, h) {
             try {
-                const {email, password, confirm, name} = request.payload;
+                const {email, password, name} = request.payload;
                 const candidate = await User.findOne({email}); //looking for email in the database
 
                 if (candidate) { //user with this email already exists
@@ -123,13 +135,13 @@ module.exports = [
                 },
                 failAction: (request, h, err) => {
                     if (!request.payload.password) {
-                        err.output.payload.message = 'Password is empty';
+                        err.output.payload.message = 'Поле пароль пустое. Введите пароль';
                     }
                     if (request.payload.password.length > 1 && request.payload.password.length < 3) {
-                        err.output.payload.message = 'Passw has less than 3 characters';
+                        err.output.payload.message = 'Пароль состоит менее чем из 3 символов';
                     }
                     if (request.payload.password.length > 8) {
-                        err.output.payload.message = 'Pass has more than 8 ch';
+                        err.output.payload.message = 'Пароль состоит более чем из 8 символов';
                     }
 
                     return h.view('auth/login', {
@@ -290,7 +302,7 @@ module.exports = [
                     await user.save();
                     return h.redirect('/login');
                 } else {
-                     return h.redirect('/login');
+                    return h.redirect('/login');
                 }
 
                 return h.redirect('/login');
