@@ -1,4 +1,5 @@
 
+const path = require('path');
 
 exports.plugin = {
     name: 'servingStaticFiles',
@@ -12,6 +13,24 @@ exports.plugin = {
                 directory: {
                     path: '.',
                     redirectToSlash: true
+                }
+            }
+        },
+        {
+            method: 'GET',
+            path: '/public/{param*}',
+            handler: {
+                directory: {
+                    path: path.join(__dirname, 'public')
+                }
+            }
+        },
+        {
+            method: 'GET',
+            path: '/upload/{param*}',
+            handler: {
+                directory: {
+                    path: path.join(__dirname, 'public/upload')
                 }
             }
         });

@@ -13,7 +13,7 @@ document.querySelectorAll('.price').forEach(node => {
 const $card = document.querySelector('#card')
 if ($card) {
     $card.addEventListener('click', event => {
-        if (event.target.classList.contains('js-remove')) {
+        if (event.target.classList.contains('upload-remove')) {
             const id = event.target.dataset.id
 
             fetch('/card/remove/' + id, {
