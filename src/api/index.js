@@ -49,9 +49,6 @@ async function start() {
             plugin: require('./plugins/loadAllRoutes')
         }
         // {
-        //     plugin: require('./plugins/emailPostmark')
-        // },
-        // {
         //     plugin: require('./plugins/layoutHandlebars')
         // }
 
