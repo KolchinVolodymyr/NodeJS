@@ -11,10 +11,10 @@ module.exports = [
         method: 'GET',
         path: `/${MODEL_NAME}`,
         options: {
-            auth: {
-                mode: 'required',
-                strategy: 'session60'
-            }
+            // auth: {
+            //     mode: 'required',
+            //     strategy: 'session60'
+            // }
         },
         handler:  function (request, h) {
 
@@ -32,10 +32,10 @@ module.exports = [
         method: 'POST',
         path: `/${MODEL_NAME}`,
         options: {
-            auth: {
-                mode: 'required',
-                strategy: 'session60'
-            },
+            // auth: {
+            //     mode: 'required',
+            //     strategy: 'session60'
+            // },
             validate: {
                 payload: Joi.object({
                     title: Joi.string().min(3).required().error(new Error('Минимальная длинна названия 3 символа')),

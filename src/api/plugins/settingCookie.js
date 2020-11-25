@@ -1,4 +1,4 @@
-
+const User = require('../users/service');
 
 exports.plugin = {
     name: 'settingCookie',
@@ -11,6 +11,7 @@ exports.plugin = {
             path: '/',
             encoding: 'base64json',
         });
+
 
         //@hapi/cookie
         await server.auth.strategy('session60', 'cookie', {
@@ -26,6 +27,44 @@ exports.plugin = {
                 return { valid: true , credentials: session };
             }
         });
+
+
+        // await server.register(AuthBearer);
+        //
+        // server.auth.strategy('session60', 'bearer-access-token', {
+        //     allowQueryToken: true,              // optional, false by default
+        //     validate: async (request, token, h) => {
+        //
+        //         // here is where you validate your token
+        //         // comparing with token from your database for example
+        //         const isValid = token === '1234';
+        //
+        //         const credentials = { token };
+        //         const artifacts = { test: 'info' };
+        //
+        //         return { isValid, credentials, artifacts };
+        //     }
+        // });
+
+
+
+        // const validate = async function (decoded, request, h) {
+        //
+        //     // do your checks to see if the person is valid
+        //     if (!User[decoded.id]) {
+        //         return { isValid: false };
+        //     }
+        //     else {
+        //         return { isValid: true };
+        //     }
+        // };
+        // await server.register(require('hapi-auth-jwt2'));
+        // server.auth.strategy('session60', 'jwt',
+        //     { key: 'NeverShareYourSecret', // Never Share your secret key
+        //         validate  // validate function defined above
+        //     });
+        //
+        // server.auth.default('session60');
 
     }
 };

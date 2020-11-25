@@ -4,7 +4,9 @@
   "description": "",
   "main": "src/api/index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",Inert
+    "server": "nodemon index.js --prefix src\\api",
+    "client": "npm run start --prefix src\\client",
+    "dev": "concurrently \"npm run server\" \"npm run client\""
   },
   "repository": {
     "type": "git",
@@ -34,5 +36,9 @@
     "nodemailer": "^6.4.11",
     "nodemailer-postmark-transport": "^3.0.0",
     "uuid": "^8.2.0"
+  },
+  "devDependencies": {
+    "concurrently": "^5.3.0",
+    "nodemon": "^2.0.6"
   }
 }

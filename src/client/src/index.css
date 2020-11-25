@@ -1,0 +1,82 @@
+@import "~materialize-css/dist/css/materialize.min.css";
+
+.price {
+    font-size: 2rem;
+}
+.course {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.course h1 {
+    margin-bottom: 2rem;
+}
+.course .price.big {
+    font-size: 2.5rem;
+}
+.card-action .action {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.auth {
+    padding-top: 1rem;
+}
+.form__buy {
+    float: right;
+    margin-top: -7px;
+}
+.form__remove {
+    margin-top: -36px;
+    float: right;
+}
+
+.avatar {
+    max-width: 300px;
+    height: auto;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

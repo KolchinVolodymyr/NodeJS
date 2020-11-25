@@ -39,36 +39,6 @@ module.exports = [
     {
         method: 'POST',
         path: `/login`,
-        handler: async (request, h) => {
-            try {
-                const {email, password} = request.payload;
-
-                const candidate = await User.findOne({ email });
-
-                if (candidate) {
-                    const areSame = await bcrypt.compare(password, candidate.password)
-                    if (areSame) {
-                        request.cookieAuth.set(candidate);
-                        return  h.redirect('/');
-
-                    } else {
-                        request.payload.message = 'Неверный пароль';
-                        return h.view('auth/login', {
-                            title: 'login',
-                            error  : request.payload.message // error object used in html template
-                        },{layout:'Layout'}).takeover();
-                    }
-                } else {
-                    request.payload.message = 'Такой Email не зарегистирован.';
-                    return h.view('auth/login', {
-                        title: 'login',
-                        error  : request.payload.message // error object used in html template
-                    },{layout:'Layout'}).takeover();
-                }
-            } catch (e) {
-                console.log(e)
-            }
-        },
         options: {
             auth: {
                 mode: 'try',
@@ -83,13 +53,52 @@ module.exports = [
                     allowUnknown: true,
                 },
                 failAction: (request, h, err) => {
-                    return h.view('auth/login', {
-                        title: 'login',
-                        error  : err.output.payload.message // error object used in html template
-                    },{layout:'Layout'}).takeover();
+                    if (!request.payload.email) {
+                        return h.response({message: 'Поле email пустое. Введите email '}).code(400).takeover();
+                    }
+                    if (!request.payload.password) {
+                        return h.response({message: 'Поле пароль пустое. Введите пароль '}).code(400).takeover();
+                    }
+
+                    return h.response({message: err.output.payload.message}).code(400).takeover();
+
                 }
             }
+        },
+        handler: async (request, h) => {
+            try {
+                const {email, password} = request.payload;
+
+                const candidate = await User.findOne({ email });
+
+                if (candidate) {
+                    const areSame = await bcrypt.compare(password, candidate.password)
+                    if (areSame) {
+
+                        await request.cookieAuth.set(candidate);
+                        //console.log('areSame',areSame);
+                        // console.log('request.headers',request.headers.autorization);
+                        // console.log('request.auth.credentials',request.auth.credentials);
+                        console.log('request.auth',request.auth);
+
+                        return h.response({
+                            // areSame: areSame,
+                            token: request.headers.autorization,
+                            userId: candidate._id,
+                            message: 'Успех. Вход выполнен'}).code(201).takeover();
+
+                    } else {
+                        return h.response({message: 'Неверный пароль'}).code(400).takeover();
+                    }
+                } else {
+                    return h.response({message: 'Такой Email не зарегистирован.'}).code(400).takeover();
+                }
+
+            } catch (e) {
+                console.log(e)
+            }
         }
+
     },
     {
         method: 'POST',
@@ -100,11 +109,9 @@ module.exports = [
                 const candidate = await User.findOne({email}); //looking for email in the database
 
                 if (candidate) { //user with this email already exists
-                    request.payload.message = 'Такой Email уже зарегистрирован. Введите другой Email.';
-                    return h.view('auth/login', {
-                        title: 'login',
-                        error  : request.payload.message, // error object used in html template
-                    },{layout:'Layout'}).takeover();
+
+                    return h.response({message: 'Такой Email уже зарегистрирован. Введите другой Email.'}).code(400).takeover();
+
                 } else {
                     const hashPassword = await bcrypt.hash(password, 10)
                     const user = new User({
@@ -112,7 +119,8 @@ module.exports = [
                     })
                     await user.save();
                     await transport.sendMail(regEmail(email)); //sending mail
-                    return h.redirect('/login#login');
+
+                    return h.response({message: 'Успех! Пользователь успешно создан'}).code(200);
 
                 }
             } catch (e) {
@@ -129,25 +137,30 @@ module.exports = [
                     email: Joi.string().email().required().error(new Error('Введите корректный email')),
                     password: Joi.string().min(3).max(8).required(),
                     confirm: Joi.string().valid(Joi.ref('password')).required().error(new Error('Пароль не совпадает, Повторите еще раз')),
+                    name: Joi.string().min(3).required(),
                 }),
                 options: {
                     allowUnknown: true,
                 },
                 failAction: (request, h, err) => {
-                    if (!request.payload.password) {
-                        err.output.payload.message = 'Поле пароль пустое. Введите пароль';
+                    if (!request.payload) {
+                        return h.response({message: 'Поле email пустое. Введите email '}).code(400).takeover();
                     }
                     if (request.payload.password.length > 1 && request.payload.password.length < 3) {
                         err.output.payload.message = 'Пароль состоит менее чем из 3 символов';
+                        return h.response({message: err.output.payload.message}).code(400).takeover();
                     }
                     if (request.payload.password.length > 8) {
                         err.output.payload.message = 'Пароль состоит более чем из 8 символов';
+                        return h.response({message: err.output.payload.message}).code(400).takeover();
                     }
-
-                    return h.view('auth/login', {
-                        title: 'login',
-                        error  : err.output.payload.message // error object used in html template
-                    },{layout:'Layout'}).takeover();
+                    if (!request.payload.name) {
+                        return h.response({message: 'Поле имя пустое. Введите имя '}).code(400).takeover();
+                    }
+                    if (request.payload.name.length < 3) {
+                        return h.response({message: 'Поле Имя. Должно быть минимум 3 символа. '}).code(400).takeover();
+                    }
+                    return h.response({message: err.output.payload.message}).code(400).takeover();
 
                 }
             }
