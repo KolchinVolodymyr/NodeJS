@@ -54,34 +54,24 @@ async function start() {
 
     ]);
 
-    //routes:
     server.route([
         {
             method: 'GET',
             path: '/',
             options: {
-                auth: {
-                    mode: 'try',
-                    strategy: 'session60'
+                handler: (request, h) => {
+                    //console.log('request.auth4', request.auth);
+                    return h.response({
+                        autorization: request.headers.autorization,
+                        token: request.headers.cookie,
+                        id: request.auth.credentials._id
+                    })
                 }
-            },
-            handler:async function (request, h) {
-                h.state('session60', {
-                    ttl: 24 * 60 * 60 * 1000,
-                    encoding: 'base64json',
-                });
-                return h.view('index',
-                    {
-                        title: 'Home',
-                        isHome: true,
-                        isAuthenticated: request.auth.isAuthenticated
-                    },
-                    {layout:'Layout'}
-                )
             }
         }
     ]);
-    // console.log('__dirname',__dirname);
+
+
     server.views({
         engines: {
             hbs: require('handlebars')

@@ -7,8 +7,6 @@ export const AuthPage = () => {
     const auth = useContext(AuthContext);
     const message = useMessage();
     const {loading, error, request, clearError} = useHttp();
-    console.log('error', error);
-    console.log('auth', auth);
 
     const [form, setForm] = useState({
         email: '', password:''
@@ -17,8 +15,6 @@ export const AuthPage = () => {
     const [formRegister, setFormRegister] = useState({
         email: '', password:'' , confirm: '', name: ''
     });
-    //console.log('form',form);
-    //console.log('formRegister',formRegister);
 
     useEffect(() => {
         message(error)
@@ -32,24 +28,18 @@ export const AuthPage = () => {
         setFormRegister({...formRegister, [event.target.name]: event.target.value})
     }
 
-    const loginHandler = async () => {
-        try {
-            const data = await request('/login','POST', {...form});
-            console.log('data-loginHandler', data);
-            console.log('data-token', data.token);
-            console.log('data-userId', data.userId);
-            console.log('auth.login()', auth.login(data.token, data.userId));
-            auth.login(data.token, data.userId);
-            //message(data.message);
-        } catch (e) {}
-    }
     const registerHandler = async () => {
         try {
             const data = await request('/register', 'POST', {...formRegister});
             message(data.message)
         } catch (e) {}
     }
-
+    const loginHandler = async () => {
+        try {
+            const data = await request('/login', 'POST', {...form})
+            auth.login(data.token, data.userId)
+        } catch (e) {}
+    }
 
     return (
         <div className="auth">

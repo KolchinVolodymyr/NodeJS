@@ -10,14 +10,15 @@ exports.plugin = {
                 try {
                     const cookie = request.headers.cookie || '',
                         token = cookie.split(/;+/).filter((str)=>{
-                            return str.indexOf('sidExample') ===0
+                            return str.indexOf('sid-example') ===0
                         }),
                         authorization = _.get(token, '0', ''),
                         parts = authorization.split(/=+/);
                     if(parts[1]) {
                         request.headers['autorization'] = `Bearer ${parts[1]}`;
                     }
-                    console.log('request.headers',request.headers);
+                    // console.log('token',token);
+                    // console.log('request.headers',request.headers);
                     return h.continue;
                 } catch (e) {
                     console.log(e)

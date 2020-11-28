@@ -8,6 +8,8 @@ const crypto = require('crypto');
 const {regEmail, resetEmail} = require('./service');
 const Nodemailer = require('nodemailer');
 const postmarkTransport = require('nodemailer-postmark-transport');
+const JWT = require('jsonwebtoken');
+
 
 const transport = Nodemailer.createTransport(postmarkTransport({
     auth: {
@@ -26,7 +28,6 @@ module.exports = [
             }
         },
         handler: function (request, h) {
-
             return h.view('auth/login',
                 {
                     title: 'login',
@@ -59,41 +60,30 @@ module.exports = [
                     if (!request.payload.password) {
                         return h.response({message: 'Поле пароль пустое. Введите пароль '}).code(400).takeover();
                     }
-
                     return h.response({message: err.output.payload.message}).code(400).takeover();
-
                 }
             }
         },
         handler: async (request, h) => {
             try {
                 const {email, password} = request.payload;
-
                 const candidate = await User.findOne({ email });
-
                 if (candidate) {
                     const areSame = await bcrypt.compare(password, candidate.password)
                     if (areSame) {
-
-                        await request.cookieAuth.set(candidate);
-                        //console.log('areSame',areSame);
-                        // console.log('request.headers',request.headers.autorization);
-                        // console.log('request.auth.credentials',request.auth.credentials);
-                        console.log('request.auth',request.auth);
-
-                        return h.response({
-                            // areSame: areSame,
-                            token: request.headers.autorization,
-                            userId: candidate._id,
-                            message: 'Успех. Вход выполнен'}).code(201).takeover();
-
+                        await request.cookieAuth.set({_id: candidate._id});
+                        const token = JWT.sign(
+                            { userId: candidate.id },
+                            'jwtSecret',
+                            { expiresIn: '1h' }
+                        )
+                        return h.response({token: token, userId: candidate._id}).code(201);
                     } else {
                         return h.response({message: 'Неверный пароль'}).code(400).takeover();
                     }
                 } else {
                     return h.response({message: 'Такой Email не зарегистирован.'}).code(400).takeover();
                 }
-
             } catch (e) {
                 console.log(e)
             }
@@ -109,9 +99,7 @@ module.exports = [
                 const candidate = await User.findOne({email}); //looking for email in the database
 
                 if (candidate) { //user with this email already exists
-
                     return h.response({message: 'Такой Email уже зарегистрирован. Введите другой Email.'}).code(400).takeover();
-
                 } else {
                     const hashPassword = await bcrypt.hash(password, 10)
                     const user = new User({
@@ -121,7 +109,6 @@ module.exports = [
                     await transport.sendMail(regEmail(email)); //sending mail
 
                     return h.response({message: 'Успех! Пользователь успешно создан'}).code(200);
-
                 }
             } catch (e) {
                 console.log(e)
@@ -178,7 +165,7 @@ module.exports = [
         handler: async function (request, h) {
             try {
                 request.cookieAuth.clear();
-                return h.redirect('/login')
+                return h.redirect('/login');
             } catch (e){
                 console.log(e);
             }
