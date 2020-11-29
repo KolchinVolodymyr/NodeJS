@@ -1,14 +1,21 @@
+import React from 'react';
 
-import React, {useContext} from 'react';
-import {AuthContext} from "../context/AuthContext";
 
 
 export const HomePage = () => {
 
-    const auth = useContext(AuthContext);
     return (
         <div>
-           Home Page
+           <h1>
+               Home Page
+           </h1>
+            <div className="progress">
+                <div className="indeterminate"></div>
+            </div>
+            <p>
+                Сайт временно недоступен. Извините, проводятся регламентные работы.
+            </p>
+
         </div>
     );
 }

@@ -151,6 +151,7 @@ export const AuthPage = () => {
                 </div>
             </div>
         </div>
+
     );
 }
 

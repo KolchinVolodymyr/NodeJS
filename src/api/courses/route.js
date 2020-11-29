@@ -15,17 +15,17 @@ module.exports = [
         },
         handler: async function (request, h) {
             const courses = await Course.find();
-
-            return h.view('courses',
-                {
-                    title: 'Courses',
-                    message: 'Tutorial',
-                    isCourses: true,
-                    isAuthenticated: request.auth.isAuthenticated,
-                    courses
-                },
-                {layout:'Layout'},
-            )
+            return h.response(courses).code(200).takeover();
+            // return h.view('courses',
+            //     {
+            //         title: 'Courses',
+            //         message: 'Tutorial',
+            //         isCourses: true,
+            //         isAuthenticated: request.auth.isAuthenticated,
+            //         courses
+            //     },
+            //     {layout:'Layout'},
+            // )
 
         }
     },
@@ -39,16 +39,22 @@ module.exports = [
             }
         },
         handler: async function (request, h) {
-            const course = await Course.findById(request.params.id);
-            return h.view('course',
-                {
-                    title: `Courses ${course.title}` ,
-                    message: 'Tutorial',
-                    isAuthenticated: request.auth.isAuthenticated,
-                    course
-                },
-                {layout:'Layout'}
-            )
+            try {
+                const course = await Course.findById(request.params.id);
+
+                return h.response(course).code(201).takeover();
+            } catch (e) {
+                console.log(e);
+            }
+            // return h.view('course',
+            //     {
+            //         title: `Courses ${course.title}` ,
+            //         message: 'Tutorial',
+            //         isAuthenticated: request.auth.isAuthenticated,
+            //         course
+            //     },
+            //     {layout:'Layout'}
+            // )
         }
     }
 ]
