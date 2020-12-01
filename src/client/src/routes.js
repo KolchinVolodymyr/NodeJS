@@ -9,6 +9,7 @@ import {ProfilePage} from "./pages/ProfilePage";
 import {CardPage} from "./pages/CardPage";
 import {OrderPage} from "./pages/OrdersPage";
 import {CourseDetailPage} from "./pages/CourseDetailPage";
+import {CourseEditPage} from "./pages/CourseEditPage";
 
 export const useRoutes = isAuthenticated => {
     if (isAuthenticated) {
@@ -20,8 +21,11 @@ export const useRoutes = isAuthenticated => {
                 <Route path="/courses" exact>
                     <CoursesPage />
                 </Route>
-                <Route path="/courses/:id">
+                <Route path="/courses/:id" exact>
                     <CourseDetailPage />
+                </Route>
+                <Route path="/courses/:id/edit" exact>
+                    <CourseEditPage />
                 </Route>
                 <Route path="/add-course" exact>
                     <AddCourse />
@@ -48,7 +52,7 @@ export const useRoutes = isAuthenticated => {
             <Route path="/courses" exact>
                 <CoursesPage />
             </Route>
-            <Route path="/courses/:id">
+            <Route path="/courses/:id" exact>
                 <CourseDetailPage />
             </Route>
             <Route path="/login" exact>

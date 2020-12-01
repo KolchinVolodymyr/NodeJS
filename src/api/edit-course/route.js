@@ -17,19 +17,21 @@ module.exports = [
         },
         handler: async function (request, h) {
             const course = await Course.findById(request.params.id);
-            return h.view('course-edit',
-                {
-                    title: 'Edit course',
-                    isAuthenticated: request.auth.isAuthenticated,
-                    course
-                },
-                {layout:'Layout'}
-            )
+            // console.log('request.credentials',request.auth.credentials);
+            return h.response(course).code(200).takeover();
+            // return h.view('course-edit',
+            //     {
+            //         title: 'Edit course',
+            //         isAuthenticated: request.auth.isAuthenticated,
+            //         course
+            //     },
+            //     {layout:'Layout'}
+            // )
         }
     },
     {
         method: 'POST',
-        path: `/${MODEL_NAME}/edit`,
+        path: `/${MODEL_NAME}/{id}/edit`,
         options: {
             auth: {
                 mode: 'required',
@@ -37,24 +39,28 @@ module.exports = [
             },
             validate: {
                 payload: Joi.object({
-                    title: Joi.string().min(3).required().error(new Error('Минимальная длинна названия 3 символа')),
-                    price: Joi.number().integer().required().error(new Error('Введите корректную цену')),
-                    img: Joi.string().uri().required().error(new Error('Введите корректный Url картинки')),
+                   // title: Joi.string().min(3).required().error(new Error('Минимальная длинна названия 3 символа')),
+                   // price: Joi.number().integer().required().error(new Error('Введите корректную цену')),
+                   // img: Joi.string().uri().required().error(new Error('Введите корректный Url картинки')),
                 }),
                 options: {
                     allowUnknown: true,
                 },
                 failAction: async (request, h, err) => {
-                    const id = request.payload.id;
-                    console.log(err.output.payload.message);
-                    return h.redirect(`/${MODEL_NAME}/${id}/edit`, { error: 'value' }).takeover();
+                    //console.log('request.payload',request.payload);
+
+                    return h.response({message: err.output.payload.message}).code(400).takeover();
+                    // return h.redirect(`/${MODEL_NAME}/${id}/edit`, { error: 'value' }).takeover();
                 }
             },
         },
         handler: async function (request, h) {
             try {
+
                 await Course.findByIdAndUpdate(request.payload.id, request.payload);
-                return h.redirect(`/${MODEL_NAME}`);
+
+                return h.response({message: 'Успех!'}).code(200).takeover();
+                // return h.redirect(`/${MODEL_NAME}`);
             } catch (e){
                 console.log(e);
             }

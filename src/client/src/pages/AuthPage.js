@@ -64,7 +64,7 @@ export const AuthPage = () => {
                                 required
                             />
                                 <label htmlFor="email">Email</label>
-                                <span className="helper-text" data-error="Введите email"></span>
+                                <span className="helper-text" data-error="Введите email"/>
                         </div>
                         <div className="input-field">
                             <input
@@ -76,7 +76,7 @@ export const AuthPage = () => {
                                 required
                             />
                                 <label htmlFor="password">Пароль</label>
-                                <span className="helper-text" data-error="Введите пароль"></span>
+                                <span className="helper-text" data-error="Введите пароль"/>
                         </div>
                         <p><a href="/reset">Забыли пароль?</a></p>
                         <button
@@ -101,7 +101,7 @@ export const AuthPage = () => {
                                 required
                             />
                                 <label htmlFor="remail">Email</label>
-                                <span className="helper-text" data-error="Введите email"></span>
+                                <span className="helper-text" data-error="Введите email"/>
                         </div>
                         <div className="input-field">
                             <input
@@ -113,7 +113,7 @@ export const AuthPage = () => {
                                 required
                             />
                                 <label htmlFor="rpassword">Пароль</label>
-                                <span className="helper-text" data-error="Введите пароль"></span>
+                                <span className="helper-text" data-error="Введите пароль"/>
                         </div>
                         <div className="input-field">
                             <input
@@ -125,7 +125,7 @@ export const AuthPage = () => {
                                 required
                             />
                                 <label htmlFor="confirm">Пароль еще раз</label>
-                                <span className="helper-text" data-error="Введите пароль"></span>
+                                <span className="helper-text" data-error="Введите пароль"/>
                         </div>
                         <div className="input-field">
                             <input
@@ -137,7 +137,7 @@ export const AuthPage = () => {
                                 required
                             />
                                 <label htmlFor="name">Ваше имя</label>
-                                <span className="helper-text" data-error="Введите имя"></span>
+                                <span className="helper-text" data-error="Введите имя"/>
                         </div>
                         <button
                             className="btn btn-primary"

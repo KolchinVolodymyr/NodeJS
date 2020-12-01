@@ -8,6 +8,7 @@ export const CoursesPage = () => {
     const [courses, setCourses] = useState([]);
     const {loading, request} = useHttp();
     const {token} = useContext(AuthContext);
+    const isAuthenticated = !!token;
 
     const fetchCourses = useCallback(async () => {
         try {
@@ -31,7 +32,7 @@ export const CoursesPage = () => {
         <div>
            <h1>Courses Page</h1>
 
-            {!loading && <CoursesList courses={courses} />}
+            {!loading && <CoursesList courses={courses} isAuthenticated={isAuthenticated} />}
         </div>
     );
 }

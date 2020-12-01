@@ -16,16 +16,6 @@ module.exports = [
         handler: async function (request, h) {
             const courses = await Course.find();
             return h.response(courses).code(200).takeover();
-            // return h.view('courses',
-            //     {
-            //         title: 'Courses',
-            //         message: 'Tutorial',
-            //         isCourses: true,
-            //         isAuthenticated: request.auth.isAuthenticated,
-            //         courses
-            //     },
-            //     {layout:'Layout'},
-            // )
 
         }
     },
