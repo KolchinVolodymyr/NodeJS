@@ -34,18 +34,20 @@ module.exports = [
             const user = await request.user
                 .populate('cart.items.courseId')
                 .execPopulate();
-            const courses = mapCartItems(user.cart)
-            return h.view('card',
-                {
-                    title: 'Card',
-                    courses: courses,
-                    isCard: true,
-                    price: computePrice(courses),
-                    isAuthenticated: request.auth.isAuthenticated,
+            const courses = mapCartItems(user.cart);
 
-                },
-                {layout:'Layout'}
-            )
+            return h.response({courses: courses, price: computePrice(courses)}).code(201);
+            // return h.view('card',
+            //     {
+            //         title: 'Card',
+            //         courses: courses,
+            //         isCard: true,
+            //         price: computePrice(courses),
+            //         isAuthenticated: request.auth.isAuthenticated,
+            //
+            //     },
+            //     {layout:'Layout'}
+            // )
         }
     },
     {
@@ -58,11 +60,15 @@ module.exports = [
             }
         },
         handler: async function (request, h) {
+
+            console.log('request.payload', request.payload);
             request.user = await User.findById(request.auth.credentials._id);
+            //console.log('request.user', request.user);
             const course = await Course.findById(request.payload.id);
 
             await request.user.addToCart(course);
-            return h.redirect(`/${MODEL_NAME}`);
+            return h.response({message: 'Товар добавлен в корзину!'}).code(200);
+            //return h.redirect(`/${MODEL_NAME}`);
         }
     },
     {

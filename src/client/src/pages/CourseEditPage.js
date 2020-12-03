@@ -8,8 +8,9 @@ import {useHistory, useParams} from "react-router-dom";
 
 export const CourseEditPage = () => {
     const [course, setCourse] = useState({
-        title:'', price:'', img:''
+        title:'', price:'', img:'', _id:''
     });
+
     const {loading, request, clearError, error} = useHttp();
     const message = useMessage();
     const history = useHistory();
@@ -41,19 +42,29 @@ export const CourseEditPage = () => {
         setCourse({...course, [event.target.name]: event.target.value})
     }
 
+
     const pressHandler = async ()  => {
         try {
             const data = await request(`/courses/${courseId}/edit`, 'POST', {...course, id: courseId}, {
                 Authorization: `Bearer ${token}`
             });
-            console.log('data', data);
-            setCourse(data);
             message(data.message);
             history.push(`/courses/${courseId}`);
         } catch (e) {
             console.log(e);
         }
     }
+    const fetchAddCourse = async ()  => {
+        try {
+            const data = await request(`/card/add`, 'POST', {id: course._id}, {
+                Authorization: `Bearer ${token}`
+            });
+            message(data.message);
+        } catch (e) {
+            console.log(e);
+        }
+    }
+
 
     if (loading) {
         return <Loader/>
@@ -112,6 +123,14 @@ export const CourseEditPage = () => {
                     >
                         Добавить
                     </button>
+                    <div>
+                        <input
+                            type="hidden"
+                            name="id"
+                            value={course._id}
+                        />
+                        <button type="submit" className="btn btn-primary" onClick={fetchAddCourse}>Купить</button>
+                    </div>
                 </div>
             </div>
         </div>

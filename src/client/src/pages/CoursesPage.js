@@ -1,14 +1,13 @@
 import React, {useCallback, useContext, useEffect, useState} from 'react';
-import {AuthContext} from "../context/AuthContext";
 import {useHttp} from "../hooks/http.hook";
 import {Loader} from "../components/loader";
 import {CoursesList} from "../components/CoursesList";
+import {AuthContext} from "../context/AuthContext";
 
 export const CoursesPage = () => {
     const [courses, setCourses] = useState([]);
     const {loading, request} = useHttp();
     const {token} = useContext(AuthContext);
-    const isAuthenticated = !!token;
 
     const fetchCourses = useCallback(async () => {
         try {
@@ -32,7 +31,7 @@ export const CoursesPage = () => {
         <div>
            <h1>Courses Page</h1>
 
-            {!loading && <CoursesList courses={courses} isAuthenticated={isAuthenticated} />}
+            {!loading && <CoursesList courses={courses} />}
         </div>
     );
 }

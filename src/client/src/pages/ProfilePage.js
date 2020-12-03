@@ -3,24 +3,23 @@ import {useHttp} from "../hooks/http.hook";
 import {AuthContext} from "../context/AuthContext";
 import {Loader} from "../components/loader";
 import {useMessage} from "../hooks/message.hook";
-import {useHistory} from "react-router-dom";
+import {UploadImg} from "../components/UploadImg";
 
 
 export const ProfilePage = () => {
     const [profile, setProfile] = useState({
         name:'', email:''
     });
-    const [avatar, setAvatar] = useState('');
     const {loading, request, clearError, error} = useHttp();
     const message = useMessage();
-    const history = useHistory();
     const {token} = useContext(AuthContext);
-    console.log('profile', profile);
+
     const fetchProfile = useCallback(async () => {
        try {
            const fetched = await request('/profile', 'GET', null, {
                Authorization: `Bearer ${token}`
            });
+           console.log('fetched',fetched)
            setProfile(fetched);
        } catch (e) {
            console.log(e);
@@ -45,10 +44,8 @@ export const ProfilePage = () => {
         try {
             const data = await request('/profile', 'POST', {...profile}, {
                 Authorization: `Bearer ${token}`
-            })
-            setAvatar(data);
+            });
             message(data.message);
-            history.push(`/profile`);
         } catch (e) {
             console.log(e);
         }
@@ -65,7 +62,7 @@ export const ProfilePage = () => {
             </h1>
             <div className="row">
                 <div className="col s6">
-                    <img className="avatar" src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png"  alt="avatar"/>
+                    <UploadImg profile={profile}/>
                 </div>
                 <div className="col s6">
                     <p>Email <strong>  {profile.email}  </strong></p>
@@ -100,10 +97,11 @@ export const ProfilePage = () => {
                             type="submit"
                             className="btn"
                             onClick={fetchAvatarProfile}
-                        >Изменить</button>
+                        > Сохранить </button>
                     </div>
                 </div>
             </div>
+
         </div>
     );
 }
