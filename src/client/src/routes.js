@@ -24,7 +24,7 @@ export const useRoutes = isAuthenticated => {
                 <Route path="/courses/:id" exact>
                     <CourseDetailPage />
                 </Route>
-                <Route path="/courses/:id/edit" exact>
+                <Route path="/courses/:id/edit" >
                     <CourseEditPage />
                 </Route>
                 <Route path="/add-course" exact>

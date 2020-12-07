@@ -8,9 +8,6 @@ import {AddCourseBtn} from "./AddCourseBtn";
 
 
 export const CoursesList = ({ courses }) => {
-    // const [course, setCourse] = useState({
-    //     id:''
-    // });
     const {token} = useContext(AuthContext);
     const isAuthenticated = !!token;
     const {loading, clearError, error, request} = useHttp();
@@ -25,22 +22,6 @@ export const CoursesList = ({ courses }) => {
     if (loading) {
         return <Loader/>
     }
-
-    // const changeHandler = event => {
-    //     setCourse({...course, [event.target.name]: event.target.value})
-    // }
-    // //
-    // const fetchAddCourse = async ()  => {
-    //     try {
-    //         await request(`/card/add`, 'POST', course.id, {
-    //             Authorization: `Bearer ${token}`
-    //         });
-    //         message('course');
-    //     } catch (e) {
-    //         console.log(e);
-    //     }
-    // }
-
     if (!courses.length) {
         return <p className="center">Курсов пока нет!!! </p>
     }
@@ -63,19 +44,7 @@ export const CoursesList = ({ courses }) => {
                                 <div className="card-action action">
                                     <Link to={`/courses/${course._id}`}>Открыть</Link>
                                     { isAuthenticated && <Link to={`/courses/${course._id}/edit`}>Редактировать</Link> }
-
-                                    <AddCourseBtn course={course._id} />
-
-                                    {/*<div>*/}
-                                    {/*    <input*/}
-                                    {/*        type="hidden"*/}
-                                    {/*        name="id"*/}
-                                    {/*        onChange={changeHandler}*/}
-                                    {/*        value={course.id}*/}
-                                    {/*    />*/}
-                                    {/*    <button type="submit" className="btn btn-primary" onClick={fetchAddCourse}>Купить2</button>*/}
-                                    {/*</div>*/}
-
+                                    <AddCourseBtn course={course} />
                                 </div>
                             </div>
                         </div>

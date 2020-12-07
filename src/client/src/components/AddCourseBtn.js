@@ -17,7 +17,7 @@ export const AddCourseBtn = ({course}) => {
 
     const fetchAddCourse = async ()  => {
         try {
-            const data = await request(`/card/add`, 'POST', {id: course}, {
+            const data = await request(`/card/add`, 'POST', {id: course._id}, {
                 Authorization: `Bearer ${token}`
             });
             message(data.message);
@@ -28,11 +28,11 @@ export const AddCourseBtn = ({course}) => {
 
     return (
         <div>
-            <input
-                type="hidden"
-                name="id"
-                value={course}
-            />
+            {/*<input*/}
+            {/*    type="hidden"*/}
+            {/*    name="id"*/}
+            {/*    value={course._id}*/}
+            {/*/>*/}
             <button type="submit" className="btn btn-primary" onClick={fetchAddCourse}>Купить</button>
         </div>
     );

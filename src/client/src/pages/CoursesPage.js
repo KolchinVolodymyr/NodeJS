@@ -5,7 +5,7 @@ import {CoursesList} from "../components/CoursesList";
 import {AuthContext} from "../context/AuthContext";
 
 export const CoursesPage = () => {
-    const [courses, setCourses] = useState([]);
+    const [courses, setCourses] = useState('');
     const {loading, request} = useHttp();
     const {token} = useContext(AuthContext);
 

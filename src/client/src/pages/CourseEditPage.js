@@ -23,6 +23,7 @@ export const CourseEditPage = () => {
                 Authorization: `Bearer ${token}`
             });
             setCourse(fetched);
+            console.log('fetched', fetched);
         } catch (e) {
             console.log(e);
         }

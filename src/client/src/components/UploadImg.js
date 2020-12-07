@@ -3,7 +3,7 @@ import {useHttp} from "../hooks/http.hook";
 import {AuthContext} from "../context/AuthContext";
 import {Loader} from "./loader";
 
-const UploadImg = ({profile}) =>{
+const UploadImg = ({profile}) => {
     const [image, setImage] = useState('');
     const {loading, request} = useHttp();
     const {token} = useContext(AuthContext);
