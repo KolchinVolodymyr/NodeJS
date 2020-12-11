@@ -164,8 +164,10 @@ module.exports = [
         },
         handler: async function (request, h) {
             try {
+
                 request.cookieAuth.clear();
-                return h.redirect('/login');
+                return h.response({message: 'все! куки удалени '})
+                //return h.redirect('/login');
             } catch (e){
                 console.log(e);
             }

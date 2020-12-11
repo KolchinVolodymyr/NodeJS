@@ -10,7 +10,7 @@ export const HomePage = () => {
                Home Page
            </h1>
             <div className="progress">
-                <div className="indeterminate"></div>
+                <div className="indeterminate"/>
             </div>
             <p>
                 Сайт временно недоступен. Извините, проводятся регламентные работы.

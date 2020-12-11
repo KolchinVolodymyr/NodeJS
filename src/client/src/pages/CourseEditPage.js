@@ -5,12 +5,10 @@ import {Loader} from "../components/loader";
 import {useMessage} from "../hooks/message.hook";
 import {useHistory, useParams} from "react-router-dom";
 
-
 export const CourseEditPage = () => {
     const [course, setCourse] = useState({
-        title:'', price:'', img:'', _id:''
+        title:'', price:'', img:''
     });
-
     const {loading, request, clearError, error} = useHttp();
     const message = useMessage();
     const history = useHistory();
@@ -43,7 +41,6 @@ export const CourseEditPage = () => {
         setCourse({...course, [event.target.name]: event.target.value})
     }
 
-
     const pressHandler = async ()  => {
         try {
             const data = await request(`/courses/${courseId}/edit`, 'POST', {...course, id: courseId}, {
@@ -55,17 +52,6 @@ export const CourseEditPage = () => {
             console.log(e);
         }
     }
-    const fetchAddCourse = async ()  => {
-        try {
-            const data = await request(`/card/add`, 'POST', {id: course._id}, {
-                Authorization: `Bearer ${token}`
-            });
-            message(data.message);
-        } catch (e) {
-            console.log(e);
-        }
-    }
-
 
     if (loading) {
         return <Loader/>
@@ -76,7 +62,6 @@ export const CourseEditPage = () => {
             <h1>
                 Редактирования курса {course.title}
             </h1>
-
             <div className="row">
                 <div>
                     <div className="input-field">
@@ -122,16 +107,8 @@ export const CourseEditPage = () => {
                         disabled={loading}
                         onClick={pressHandler}
                     >
-                        Добавить
+                       Изменить
                     </button>
-                    <div>
-                        <input
-                            type="hidden"
-                            name="id"
-                            value={course._id}
-                        />
-                        <button type="submit" className="btn btn-primary" onClick={fetchAddCourse}>Купить</button>
-                    </div>
                 </div>
             </div>
         </div>

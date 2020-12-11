@@ -4,9 +4,8 @@ import {AuthContext} from "../context/AuthContext";
 import {useMessage} from "../hooks/message.hook";
 
 export const AddCourseBtn = ({course}) => {
-
     const {request, error, clearError} = useHttp();
-    const {token} = useContext(AuthContext);
+    const {token, userId} = useContext(AuthContext);
     const message = useMessage();
     /**/
 
@@ -17,7 +16,7 @@ export const AddCourseBtn = ({course}) => {
 
     const fetchAddCourse = async ()  => {
         try {
-            const data = await request(`/card/add`, 'POST', {id: course._id}, {
+            const data = await request(`/card/add`, 'POST', {id: course._id, userId: userId}, {
                 Authorization: `Bearer ${token}`
             });
             message(data.message);
@@ -28,11 +27,6 @@ export const AddCourseBtn = ({course}) => {
 
     return (
         <div>
-            {/*<input*/}
-            {/*    type="hidden"*/}
-            {/*    name="id"*/}
-            {/*    value={course._id}*/}
-            {/*/>*/}
             <button type="submit" className="btn btn-primary" onClick={fetchAddCourse}>Купить</button>
         </div>
     );

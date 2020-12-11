@@ -5,7 +5,7 @@ import {CoursesList} from "../components/CoursesList";
 import {AuthContext} from "../context/AuthContext";
 
 export const CoursesPage = () => {
-    const [courses, setCourses] = useState('');
+    const [courses, setCourses] = useState([]);
     const {loading, request} = useHttp();
     const {token} = useContext(AuthContext);
 
@@ -27,11 +27,22 @@ export const CoursesPage = () => {
         return <Loader/>
     }
 
+    if (!courses.length) {
+        return (
+            <p className="center">Курсов пока нет!!! </p>
+        )
+    }
+
     return (
         <div>
-           <h1>Courses Page</h1>
-
-            {!loading && <CoursesList courses={courses} />}
+            <h1>Courses Page</h1>
+            <div className="row">
+                {courses.map(course => {
+                     return (
+                         <CoursesList key={course._id} course={course} />
+                         )
+                    })}
+            </div>
         </div>
     );
 }

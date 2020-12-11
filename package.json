@@ -19,7 +19,6 @@
   },
   "homepage": "https://github.com/KolchinVolodymyr/NodeJS#readme",
   "dependencies": {
-    "@hapi/boom": "^9.1.0",
     "@hapi/cookie": "^10.1.0",
     "@hapi/joi": "^15.1.1",
     "@hapi/vision": "^5.5.0",

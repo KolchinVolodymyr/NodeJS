@@ -16,9 +16,10 @@ export const CourseDetailPage = () => {
             const fetched = await request(`/courses/${courseId}`, 'GET', null,{
                 Authorization: `Bearer ${token}`
             });
-            console.log('getCourse');
             setCourse(fetched);
-        } catch (e) {console.log('e',e)}
+        } catch (e) {
+            console.log(e)
+        }
     }, [token, courseId, request]);
 
     useEffect(()=>{

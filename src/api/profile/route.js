@@ -2,8 +2,6 @@
 
 const MODEL_NAME = 'profile';
 const User = require('../users/service');
-const fs = require('fs');
-const path = require('path');
 
 module.exports = [
     {

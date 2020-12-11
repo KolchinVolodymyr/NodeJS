@@ -36,15 +36,6 @@ module.exports = [
             } catch (e) {
                 console.log(e);
             }
-            // return h.view('course',
-            //     {
-            //         title: `Courses ${course.title}` ,
-            //         message: 'Tutorial',
-            //         isAuthenticated: request.auth.isAuthenticated,
-            //         course
-            //     },
-            //     {layout:'Layout'}
-            // )
         }
     }
 ]

@@ -19,22 +19,33 @@ module.exports = [
             try {
                 const orders = await Order.find({'user.userId': request.auth.credentials._id})
                     .populate('user.userId')
-                return h.view('orders',
-                    {
-                        title: 'Orders',
-                        isOrder: true,
-                        orders: orders.map(o => {
-                            return {
-                                ...o._doc,
-                                price: o.courses.reduce((total, c)=>{
-                                    return total += c.count * c.course.price
-                                },0)
-                            }
-                        }),
-                        isAuthenticated: request.auth.isAuthenticated
-                    },
-                    {layout:'Layout'}
-                )
+
+                return h.response({
+                    orders: orders.map(o => {
+                        return {
+                            ...o._doc,
+                            price: o.courses.reduce((total, c)=>{
+                                return total += c.count * c.course.price
+                            },0)
+                        }
+                    })});
+
+                // return h.view('orders',
+                //     {
+                //         title: 'Orders',
+                //         isOrder: true,
+                //         orders: orders.map(o => {
+                //             return {
+                //                 ...o._doc,
+                //                 price: o.courses.reduce((total, c)=>{
+                //                     return total += c.count * c.course.price
+                //                 },0)
+                //             }
+                //         }),
+                //         isAuthenticated: request.auth.isAuthenticated
+                //     },
+                //     {layout:'Layout'}
+                // )
             }catch (e) {
                 console.log(e);
             }
@@ -68,7 +79,8 @@ module.exports = [
                 })
                 await order.save();
                 await request.user.clearCart();
-                return h.redirect(`/orders`);
+                return h.response({message: 'Ваш заказ был успешно сформирован!'})
+                //return h.redirect(`/orders`);
              }
              catch (e) {
                  console.log(e);
