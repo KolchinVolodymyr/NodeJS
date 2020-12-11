@@ -16,7 +16,6 @@ module.exports = [
         handler: async function (request, h) {
             const courses = await Course.find();
             return h.response(courses).code(200).takeover();
-
         }
     },
     {
@@ -32,7 +31,7 @@ module.exports = [
             try {
                 const course = await Course.findById(request.params.id);
 
-                return h.response(course).code(201).takeover();
+                return h.response(course).code(200).takeover();
             } catch (e) {
                 console.log(e);
             }

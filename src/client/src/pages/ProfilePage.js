@@ -19,7 +19,6 @@ export const ProfilePage = () => {
            const fetched = await request('/profile', 'GET', null, {
                Authorization: `Bearer ${token}`
            });
-           console.log('fetched',fetched)
            setProfile(fetched);
        } catch (e) {
            console.log(e);

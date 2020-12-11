@@ -1,8 +1,7 @@
 'use strict';
 
-const MODEL_NAME = 'login';
 const Joi = require('@hapi/joi');
-const User = require('../users/service');
+const User = require('../profile/service');
 const bcrypt = require('bcryptjs');
 const crypto = require('crypto');
 const {regEmail, resetEmail} = require('./service');
@@ -18,25 +17,6 @@ const transport = Nodemailer.createTransport(postmarkTransport({
 }));
 
 module.exports = [
-    {
-        method: 'GET',
-        path: `/${MODEL_NAME}`,
-        options: {
-            auth: {
-                mode: 'try',
-                strategy: 'session60'
-            }
-        },
-        handler: function (request, h) {
-            return h.view('auth/login',
-                {
-                    title: 'login',
-                    isLogin: true
-                },
-                {layout:'Layout'}
-            )
-        }
-    },
     {
         method: 'POST',
         path: `/login`,
@@ -69,7 +49,7 @@ module.exports = [
                 const {email, password} = request.payload;
                 const candidate = await User.findOne({ email });
                 if (candidate) {
-                    const areSame = await bcrypt.compare(password, candidate.password)
+                    const areSame = await bcrypt.compare(password, candidate.password);
                     if (areSame) {
                         await request.cookieAuth.set({_id: candidate._id});
                         const token = JWT.sign(
@@ -101,10 +81,10 @@ module.exports = [
                 if (candidate) { //user with this email already exists
                     return h.response({message: 'Такой Email уже зарегистрирован. Введите другой Email.'}).code(400).takeover();
                 } else {
-                    const hashPassword = await bcrypt.hash(password, 10)
+                    const hashPassword = await bcrypt.hash(password, 10);
                     const user = new User({
                         email, name, password: hashPassword, cart: {items: []}
-                    })
+                    });
                     await user.save();
                     await transport.sendMail(regEmail(email)); //sending mail
 
@@ -165,8 +145,8 @@ module.exports = [
         handler: async function (request, h) {
             try {
 
-                request.cookieAuth.clear();
-                return h.response({message: 'все! куки удалени '})
+                return request.cookieAuth.clear();
+                //return h.response({message: 'все! куки удалени '})
                 //return h.redirect('/login');
             } catch (e){
                 console.log(e);

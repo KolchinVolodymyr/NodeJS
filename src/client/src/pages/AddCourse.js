@@ -1,7 +1,6 @@
 import React, {useContext, useEffect, useState} from 'react';
 import {AuthContext} from "../context/AuthContext";
 import {useHttp} from "../hooks/http.hook";
-
 import {useHistory} from 'react-router-dom';
 import {useMessage} from "../hooks/message.hook";
 
@@ -37,7 +36,7 @@ export const AddCourse = () => {
     return (
         <div>
            <h1>
-               Add Course Page
+               Добавить курс
            </h1>
             <div>
                 <div className="input-field">
@@ -50,7 +49,7 @@ export const AddCourse = () => {
                         required
                     />
                         <label htmlFor="title">Названые курса</label>
-                        <span className="helper-text" data-error="Введите название"></span>
+                        <span className="helper-text" data-error="Введите название"/>
                 </div>
                 <div className="input-field">
                     <input
@@ -62,7 +61,7 @@ export const AddCourse = () => {
                         required
                     />
                         <label htmlFor="price">Цена курса</label>
-                        <span className="helper-text" data-error="Введите цену"></span>
+                        <span className="helper-text" data-error="Введите цену"/>
                 </div>
                 <div className="input-field">
                     <input
@@ -74,7 +73,7 @@ export const AddCourse = () => {
                         required
                     />
                         <label htmlFor="img">URL картинки</label>
-                        <span className="helper-text" data-error="Введите URL картинки"></span>
+                        <span className="helper-text" data-error="Введите URL картинки"/>
                 </div>
 
                 <button

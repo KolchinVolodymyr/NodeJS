@@ -36,7 +36,7 @@ export const OrderPage = () => {
         return <Loader/>
     }
     if(order.length===0) {
-        return <h2>Заказы отсутствую</h2>
+        return <h2>Заказы отсутствуют</h2>
     }
     return (
         <div>

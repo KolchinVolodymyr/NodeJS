@@ -2,7 +2,7 @@
 
 const MODEL_NAME = 'orders';
 const Order = require('./service');
-const User = require('../users/service');
+const User = require('../profile/service');
 
 
 module.exports = [
@@ -29,23 +29,6 @@ module.exports = [
                             },0)
                         }
                     })});
-
-                // return h.view('orders',
-                //     {
-                //         title: 'Orders',
-                //         isOrder: true,
-                //         orders: orders.map(o => {
-                //             return {
-                //                 ...o._doc,
-                //                 price: o.courses.reduce((total, c)=>{
-                //                     return total += c.count * c.course.price
-                //                 },0)
-                //             }
-                //         }),
-                //         isAuthenticated: request.auth.isAuthenticated
-                //     },
-                //     {layout:'Layout'}
-                // )
             }catch (e) {
                 console.log(e);
             }
@@ -80,7 +63,6 @@ module.exports = [
                 await order.save();
                 await request.user.clearCart();
                 return h.response({message: 'Ваш заказ был успешно сформирован!'})
-                //return h.redirect(`/orders`);
              }
              catch (e) {
                  console.log(e);

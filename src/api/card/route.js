@@ -1,23 +1,9 @@
 'use strict';
 
 const MODEL_NAME = 'card';
-const User = require('../users/service');
+const User = require('../profile/service');
 const Course = require('../add-course/service');
-
-
-function mapCartItems(cart) {
-    return cart.items.map(c => ({
-        ...c.courseId._doc,
-        id: c.courseId.id,
-        count: c.count
-    }))
-}
-
-function computePrice(courses) {
-    return courses.reduce((total, course) => {
-        return total += course.price * course.count
-    }, 0)
-}
+const {computePrice, mapCartItems} = require('./service');
 
 module.exports = [
     {
@@ -40,7 +26,6 @@ module.exports = [
                 courses: courses,
                 price: computePrice(courses)
             }).code(200).takeover();
-
         }
     },
     {

@@ -16,7 +16,11 @@ export const CoursesPage = () => {
             })
             setCourses(fetched)
         } catch (e) {}
-    }, [token, request])
+    }, [token, request]);
+
+    function removeCourse(id) {
+        setCourses(courses.filter(course => course._id !== id));
+    }
 
     useEffect(() => {
         fetchCourses()
@@ -35,11 +39,11 @@ export const CoursesPage = () => {
 
     return (
         <div>
-            <h1>Courses Page</h1>
+            <h1>Все курсы</h1>
             <div className="row">
                 {courses.map(course => {
                      return (
-                         <CoursesList key={course._id} course={course} />
+                         <CoursesList key={course._id} removeCourse={removeCourse} course={course} />
                          )
                     })}
             </div>

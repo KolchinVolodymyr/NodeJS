@@ -3,7 +3,7 @@ import {useHttp} from "../hooks/http.hook";
 import {AuthContext} from "../context/AuthContext";
 import {Loader} from "./loader";
 
-const UploadImg = ({profile}) => {
+export const UploadImg = ({profile}) => {
     const [image, setImage] = useState('');
     const {loading, request} = useHttp();
     const {token} = useContext(AuthContext);
@@ -46,18 +46,17 @@ const UploadImg = ({profile}) => {
             />
             <button
                 type="submit"
-                className="btn"
+                className="btn green avatar__btn"
                 onClick={fetchAvatarProfile}
             > Сохранить аватар</button>
 
             {image ? (
-                <img src={image} alt='avatar'/>
+                <img className="avatar" src={image} alt='avatar'/>
             ) : (
-                <img src={profile.avatarUrl} alt='avatar'/>
+                <img className="avatar" src={profile.avatarUrl} alt='avatar'/>
             )}
         </div>
     )
 }
-export {UploadImg}
 
 

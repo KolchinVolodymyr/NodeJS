@@ -17,8 +17,7 @@ exports.plugin = {
                     if(parts[1]) {
                         request.headers['autorization'] = `Bearer ${parts[1]}`;
                     }
-                    // console.log('token',token);
-                    // console.log('request.headers',request.headers);
+
                     return h.continue;
                 } catch (e) {
                     console.log(e)

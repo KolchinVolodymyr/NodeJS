@@ -3,9 +3,9 @@ import {useHttp} from "../hooks/http.hook";
 import {AuthContext} from "../context/AuthContext";
 import {useMessage} from "../hooks/message.hook";
 
-export const AddCourseBtn = ({course}) => {
+export const DeleteCourseBtn = ({course, removeCourse}) => {
     const {request, error, clearError} = useHttp();
-    const {token, userId} = useContext(AuthContext);
+    const {token} = useContext(AuthContext);
     const message = useMessage();
     /**/
 
@@ -14,11 +14,12 @@ export const AddCourseBtn = ({course}) => {
         clearError()
     }, [error, message, clearError]);
 
-    const fetchAddCourse = async ()  => {
+    const deleteCourse = async ()  => {
         try {
-            const data = await request(`/card/add`, 'POST', {id: course._id, userId: userId}, {
+            const data = await request(`/courses/remove`, 'POST', {id: course._id}, {
                 Authorization: `Bearer ${token}`
             });
+            removeCourse(course._id);
             message(data.message);
         } catch (e) {
             console.log(e);
@@ -26,8 +27,8 @@ export const AddCourseBtn = ({course}) => {
     }
 
     return (
-        <div className="add-btn">
-            <button type="submit" className="btn btn-primary" onClick={fetchAddCourse}>Купить</button>
+        <div className="margin-btn">
+            <button type="submit" className="btn btn-primary red" onClick={deleteCourse}>Удалить</button>
         </div>
     );
 }

@@ -5,8 +5,9 @@ import {useHttp} from "../hooks/http.hook";
 import {useMessage} from "../hooks/message.hook";
 import {AuthContext} from "../context/AuthContext";
 import {AddCourseBtn} from "./AddCourseBtn";
+import {DeleteCourseBtn} from "./DeleteCourseBtn";
 
-export const CoursesList = ({ course }) => {
+export const CoursesList = ({ course, removeCourse }) => {
     const {userId} = useContext(AuthContext);
     const {loading, clearError, error} = useHttp();
     const message = useMessage();
@@ -35,6 +36,7 @@ export const CoursesList = ({ course }) => {
                     <Link to={`/courses/${course._id}`}>Открыть</Link>
                     { course.userId===userId && <Link to={`/courses/${course._id}/edit`}>Редактировать</Link> }
                     <AddCourseBtn course={course} />
+                    { course.userId===userId && <DeleteCourseBtn removeCourse={removeCourse} course={course}/>}
                 </div>
             </div>
         </div>

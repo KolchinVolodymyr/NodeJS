@@ -1,7 +1,7 @@
 'use strict';
 
 const MODEL_NAME = 'profile';
-const User = require('../users/service');
+const User = require('./service');
 
 module.exports = [
     {
@@ -17,7 +17,7 @@ module.exports = [
             try {
                 return h.response(request.auth.credentials).code(200).takeover();
             } catch (e) {
-                console.log('Error', e);
+                console.log(e);
             }
         }
     },
