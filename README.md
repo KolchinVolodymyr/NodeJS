@@ -1,4 +1,4 @@
-# NodeJS
+# React Hapi.js Mongodb
 ###
 # Development server
     "npm run server"
