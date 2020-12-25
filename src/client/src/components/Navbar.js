@@ -1,16 +1,52 @@
 import React, {useContext} from 'react'
 import {NavLink, useHistory} from 'react-router-dom'
 import {AuthContext} from "../context/AuthContext";
+import { useCookies } from 'react-cookie';
+import {useHttp} from "../hooks/http.hook";
 
 export const Navbar = () => {
     const history = useHistory();
     const auth = useContext(AuthContext);
 
-    const logoutHandler = event => {
+    const [cookies, setCookie] = useCookies(['sid-example']);
+    //document.cookie = "sid-example3=World";
+    // const cookieValue = document.cookie;
+    //
+    // console.log('cookieValue',cookieValue);
+    // (()=> {
+    //     setCookie('data', 'test', { path: '/' });
+    // })()
+
+    console.log('cookies', cookies);
+    console.log('document.cookie',document.cookie )
+
+    //console.log('setCookie', setCookie);
+
+    const {request} = useHttp();
+
+    const logoutHandler = (event) => {
         event.preventDefault()
         auth.logout()
         history.push('/')
+        const data = request('/logout', 'GET', null, {
+
+        });
+        console.log('data', data);
     }
+
+    //document.cookie = "sid-example2" + '= expires=Thu, 01 Jan 2021 00:00:00 UTC';
+    //document.cookie = "sid-example3=World";
+
+    // const cookieValue = document.cookie
+    //     .split('; ')
+    //     // .find(row => row.startsWith('sid-example'))
+    //     // .split('=');
+    // // console.log('cookieValue',cookieValue);
+    // //
+    // // console.log('document.cookie', document.cookie);
+    // function alertCookieValue() {
+    //     alert(cookieValue);
+    // }
 
     if (auth.token){
         return (

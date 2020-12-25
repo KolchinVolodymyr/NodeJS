@@ -18,14 +18,13 @@ export const CoursesPage = () => {
         } catch (e) {}
     }, [token, request]);
 
-    function removeCourse(id) {
-        setCourses(courses.filter(course => course._id !== id));
-    }
-
     useEffect(() => {
         fetchCourses()
     }, [fetchCourses]);
 
+    function removeCourse(id) {
+        setCourses(courses.filter(course => course._id !== id));
+    }
 
     if (loading) {
         return <Loader/>

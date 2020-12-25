@@ -25,6 +25,10 @@ module.exports = [
                 mode: 'try',
                 strategy: 'session60'
             },
+            state: {
+                parse: true,
+                failAction: 'error'
+            },
             validate: {
                 payload: Joi.object({
                     email: Joi.string().email().required().error(new Error('Введите корректный email')),
@@ -57,6 +61,8 @@ module.exports = [
                             'jwtSecret',
                             { expiresIn: '1h' }
                         )
+
+                        //console.log('request',request);
                         return h.response({token: token, userId: candidate._id}).code(201);
                     } else {
                         return h.response({message: 'Неверный пароль'}).code(400).takeover();
@@ -121,6 +127,7 @@ module.exports = [
                         err.output.payload.message = 'Пароль состоит более чем из 8 символов';
                         return h.response({message: err.output.payload.message}).code(400).takeover();
                     }
+
                     if (!request.payload.name) {
                         return h.response({message: 'Поле имя пустое. Введите имя '}).code(400).takeover();
                     }
@@ -144,152 +151,10 @@ module.exports = [
         },
         handler: async function (request, h) {
             try {
-
-                return request.cookieAuth.clear();
-                //return h.response({message: 'все! куки удалени '})
-                //return h.redirect('/login');
+                request.cookieAuth.clear();
+                return h.response({message: 'куки удалени'}).code(200).takeover();
             } catch (e){
                 console.log(e);
-            }
-        }
-    },
-    {
-        method: 'GET',
-        path: `/reset`,
-        options: {
-            auth: {
-                mode: 'try',
-                strategy: 'session60'
-            }
-        },
-        handler: function (request, h) {
-            return h.view('auth/reset',
-                {
-                    title: 'Reset'
-                },
-                {layout:'Layout'}
-            )
-        }
-    },
-    {
-        method: 'POST',
-        path: `/reset`,
-        options: {
-            auth: {
-                mode: 'try',
-                strategy: 'session60'
-            },
-            validate: {
-                payload: Joi.object({
-                    email: Joi.string().email().required().error(new Error('Введите корректный email'))
-                }),
-                options: {
-                    allowUnknown: true,
-                },
-                failAction: (request, h, err) => {
-
-                    return h.view('auth/reset', {
-                        title: 'Reset',
-                        error  : err.output.payload.message // error object used in html template
-                    },{layout:'Layout'}).takeover();
-
-                }
-            }
-        },
-        handler: async function (request, h) {
-            try {
-                const token = crypto.randomBytes(32).toString('hex'); //генерация токена
-                const candidate = await User.findOne({email: request.payload.email}); //looking for email in the database
-                if (candidate) {
-                    candidate.resetToken = token;
-                    candidate.resetTokenExp = Date.now() + 60 * 60 * 1000;
-                    await candidate.save();
-
-                    await transport.sendMail(resetEmail(candidate.email, candidate.resetToken)); //sending mail
-                    return h.redirect('/login');
-                } else {
-                    return h.view('auth/reset', {
-                        title: 'Reset',
-                        error  : 'Такой Email не зарегистирован.' // error object used in html template
-                    },{layout:'Layout'}).takeover();
-                }
-                return h.redirect('/login');
-            } catch (e) {
-                console.log(e)
-            }
-        }
-    },
-    {
-        method: 'GET',
-        path: `/password/{token}`,
-        options: {
-            auth: {
-                mode: 'try',
-                strategy: 'session60'
-            }
-        },
-        handler:async function (request, h) {
-            if (!request.params.token) {
-                return h.redirect('/login')
-            }
-
-            try {
-                const user = await User.findOne({
-                    resetToken: request.params.token,
-                    resetTokenExp: {$gt: Date.now()}
-                })
-
-                if (!user) {
-                    return h.view('auth/login', {
-                        title: 'Login',
-                        error  : 'Время жизни токена истекло',// error object used in html template
-                    },{layout:'Layout'}).takeover();
-                } else {
-                    return h.view('auth/password',
-                        {
-                            title: 'NEW Password',
-                            userId: user._id.toString(),
-                            token: request.params.token
-                        },
-                        {layout:'Layout'}
-                    )
-                }
-            } catch (e) {
-                console.log(e)
-            }
-
-        }
-    },
-    {
-        method: 'POST',
-        path: `/password`,
-        options: {
-            auth: {
-                mode: 'try',
-                strategy: 'session60'
-            }
-        },
-        handler: async function (request, h) {
-            try {
-                const user = await User.findOne({
-                    _id: request.payload.userId,
-                    resetToken: request.payload.token,
-                    resetTokenExp: {$gt: Date.now()}
-                })
-
-                if (user) {
-                    user.password = await bcrypt.hash(request.payload.password, 10);
-                    user.resetToken = undefined;
-                    user.resetTokenExp = undefined;
-                    await user.save();
-                    return h.redirect('/login');
-                } else {
-                    return h.redirect('/login');
-                }
-
-                return h.redirect('/login');
-            } catch (e) {
-                console.log(e)
             }
         }
     }
