@@ -4,10 +4,10 @@ This is an hapi view engine which renders React components on server. It renders
 
 This is intended to be used as a replacement for existing server-side view solutions, like jade, ejs, or handlebars.
 
-# Development server
+# Server
     "npm run server"
 
-# Development client
+# Client
     "npm run client"
 
 
