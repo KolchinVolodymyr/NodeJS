@@ -14,12 +14,14 @@ export const CoursesPage = () => {
             const fetched = await request('/courses', 'GET', null, {
                 Authorization: `Bearer ${token}`
             })
-            setCourses(fetched)
-        } catch (e) {}
+            setCourses(fetched);
+        } catch (e) {
+            console.log(e);
+        }
     }, [token, request]);
 
     useEffect(() => {
-        fetchCourses()
+        fetchCourses();
     }, [fetchCourses]);
 
     function removeCourse(id) {
@@ -29,7 +31,6 @@ export const CoursesPage = () => {
     if (loading) {
         return <Loader/>
     }
-
     if (!courses.length) {
         return (
             <p className="center">Курсов пока нет!!! </p>

@@ -18,12 +18,12 @@ export const CourseDetailPage = () => {
             });
             setCourse(fetched);
         } catch (e) {
-            console.log(e)
+            console.log(e);
         }
     }, [token, courseId, request]);
 
     useEffect(()=>{
-        getCourse()
+        getCourse();
     }, [getCourse]);
 
     if (loading) {

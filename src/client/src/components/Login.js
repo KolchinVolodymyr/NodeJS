@@ -8,25 +8,25 @@ export const Login = () => {
     const auth = useContext(AuthContext);
     const message = useMessage();
     const {loading, error, request, clearError} = useHttp();
-
     const [form, setForm] = useState({
         email: '', password:''
     });
 
     useEffect(() => {
-        message(error)
-        clearError()
+        message(error);
+        clearError();
     }, [error, message, clearError])
 
     const changeHandler = event => {
-        setForm({...form, [event.target.name]: event.target.value})
+        setForm({...form, [event.target.name]: event.target.value});
     }
     const loginHandler = async () => {
         try {
-            const data = await request('/login', 'POST', {...form})
-            auth.login(data.token, data.userId)
-
-        } catch (e) {}
+            const data = await request('/login', 'POST', {...form});
+            auth.login(data.token, data.userId);
+        } catch (e) {
+            console.log(e);
+        }
     }
 
     return (

@@ -7,11 +7,10 @@ export const DeleteCourseBtn = ({course, removeCourse}) => {
     const {request, error, clearError} = useHttp();
     const {token} = useContext(AuthContext);
     const message = useMessage();
-    /**/
 
     useEffect(() => {
-        message(error)
-        clearError()
+        message(error);
+        clearError();
     }, [error, message, clearError]);
 
     const deleteCourse = async ()  => {

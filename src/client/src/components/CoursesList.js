@@ -14,8 +14,8 @@ export const CoursesList = ({ course, removeCourse }) => {
 
     /**/
     useEffect(() => {
-        message(error)
-        clearError()
+        message(error);
+        clearError();
     }, [error, message, clearError]);
 
     if (loading) {
@@ -33,11 +33,15 @@ export const CoursesList = ({ course, removeCourse }) => {
                     <p className="price">{course.price}</p>
                 </div>
                 <div className="card-action action">
-                    <Link to={`/courses/${course._id}`}>Открыть</Link>
-                    { course.userId===userId && <Link to={`/courses/${course._id}/edit`}>Редактировать</Link> }
-                    <AddCourseBtn course={course} />
-                    { course.userId===userId && <DeleteCourseBtn removeCourse={removeCourse} course={course}/>}
-                </div>
+                    <div className="row">
+                        <Link to={`/courses/${course._id}`}>Открыть</Link>
+                        { course.userId===userId && <Link to={`/courses/${course._id}/edit`}>Редактировать</Link> }
+                    </div>
+                    <div className="row">
+                        <AddCourseBtn course={course} />
+                        { course.userId===userId && <DeleteCourseBtn removeCourse={removeCourse} course={course}/>}
+                    </div>
+                   </div>
             </div>
         </div>
     )

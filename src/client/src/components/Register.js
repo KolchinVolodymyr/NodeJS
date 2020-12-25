@@ -6,14 +6,13 @@ import {useHttp} from "../hooks/http.hook";
 export const Register = () => {
     const message = useMessage();
     const {loading, error, request, clearError} = useHttp();
-
     const [formRegister, setFormRegister] = useState({
         email: '', password:'' , confirm: '', name: ''
     });
 
     useEffect(() => {
-        message(error)
-        clearError()
+        message(error);
+        clearError();
     }, [error, message, clearError])
 
     const changeHandlerRegister = event => {
@@ -23,8 +22,10 @@ export const Register = () => {
     const registerHandler = async () => {
         try {
             const data = await request('/register', 'POST', {...formRegister});
-            message(data.message)
-        } catch (e) {}
+            message(data.message);
+        } catch (e) {
+            console.log(e);
+        }
     }
 
     return (

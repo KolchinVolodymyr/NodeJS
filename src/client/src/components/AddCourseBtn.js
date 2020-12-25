@@ -10,8 +10,8 @@ export const AddCourseBtn = ({course}) => {
     /**/
 
     useEffect(() => {
-        message(error)
-        clearError()
+        message(error);
+        clearError();
     }, [error, message, clearError]);
 
     const fetchAddCourse = async ()  => {

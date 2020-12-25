@@ -1,58 +1,27 @@
 import React, {useContext} from 'react'
 import {NavLink, useHistory} from 'react-router-dom'
 import {AuthContext} from "../context/AuthContext";
-import { useCookies } from 'react-cookie';
 import {useHttp} from "../hooks/http.hook";
 
 export const Navbar = () => {
     const history = useHistory();
     const auth = useContext(AuthContext);
-
-    const [cookies, setCookie] = useCookies(['sid-example']);
-    //document.cookie = "sid-example3=World";
-    // const cookieValue = document.cookie;
-    //
-    // console.log('cookieValue',cookieValue);
-    // (()=> {
-    //     setCookie('data', 'test', { path: '/' });
-    // })()
-
-    console.log('cookies', cookies);
-    console.log('document.cookie',document.cookie )
-
-    //console.log('setCookie', setCookie);
-
     const {request} = useHttp();
 
     const logoutHandler = (event) => {
-        event.preventDefault()
-        auth.logout()
+        event.preventDefault();
+        auth.logout();
+        request('/logout', 'GET', null, {});
         history.push('/')
-        const data = request('/logout', 'GET', null, {
-
-        });
-        console.log('data', data);
     }
-
-    //document.cookie = "sid-example2" + '= expires=Thu, 01 Jan 2021 00:00:00 UTC';
-    //document.cookie = "sid-example3=World";
-
-    // const cookieValue = document.cookie
-    //     .split('; ')
-    //     // .find(row => row.startsWith('sid-example'))
-    //     // .split('=');
-    // // console.log('cookieValue',cookieValue);
-    // //
-    // // console.log('document.cookie', document.cookie);
-    // function alertCookieValue() {
-    //     alert(cookieValue);
-    // }
 
     if (auth.token){
         return (
             <nav>
                 <div className="nav-wrapper">
-                    <a href="/" className="brand-logo">Интернет магазин</a>
+                    <a href="/" className="brand-logo">
+                        Курсы
+                    </a>
                     <ul id="nav-mobile" className="right hide-on-med-and-down">
                         <li><NavLink to="/">Главная</NavLink></li>
                         <li><NavLink to="/courses">Курсы</NavLink></li>
@@ -69,7 +38,10 @@ export const Navbar = () => {
         return (
             <nav>
                 <div className="nav-wrapper">
-                    <a href="/" className="brand-logo">Интернет магазин</a>
+                    <a href="/" className="brand-logo">
+                        <img src="https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.pngwing.com%2Fru%2Ffree-png-henbv&psig=AOvVaw1zLpAqCY2ob63zEVkqB_Md&ust=1608984346504000&source=images&cd=vfe&ved=0CAIQjRxqFwoTCNinmPeL6e0CFQAAAAAdAAAAABAD" alt=""/>
+                        Курсы
+                    </a>
                     <ul id="nav-mobile" className="right hide-on-med-and-down">
                         <li><NavLink to="/">Главная</NavLink></li>
                         <li><NavLink to="/courses">Курсы</NavLink></li>

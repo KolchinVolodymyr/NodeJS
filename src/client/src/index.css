@@ -41,10 +41,8 @@
     height: auto;
 }
 .add-btn {
-    margin-top: 0.5rem;
-}
-.margin-btn {
-    margin-top: 0.7rem;
+    margin-right: 2rem;
+    float: left;
 }
 .avatar__btn {
     margin-bottom: 1rem;

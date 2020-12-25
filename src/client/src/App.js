@@ -21,7 +21,7 @@ function App() {
             token, login, logout, userId, isAuthenticated
         }}>
             <Router>
-                {ready && <Navbar />}
+                <Navbar />
                 <div className="container">
                     {routes}
                 </div>

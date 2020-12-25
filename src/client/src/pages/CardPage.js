@@ -24,12 +24,12 @@ export const CardPage = () => {
     }, [token, request])
 
     useEffect(()=>{
-        fetchCard()
+        fetchCard();
     }, [fetchCard]);
     /**/
     useEffect(() => {
-        message(error)
-        clearError()
+        message(error);
+        clearError();
     }, [error, message, clearError]);
 
 
@@ -41,7 +41,7 @@ export const CardPage = () => {
         setCard(fetched.courses);
     };
 
-    const pressHandler = async ()  => {
+    const ordersHandler = async ()  => {
         try {
             const data = await request('/orders', 'POST', {}, {
                 Authorization: `Bearer ${token}`
@@ -98,7 +98,7 @@ export const CardPage = () => {
                 type="submit"
                 className="btn"
                 disabled={loading}
-                onClick={pressHandler}
+                onClick={ordersHandler}
             >
                 Сделать заказ
             </button>

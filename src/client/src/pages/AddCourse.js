@@ -14,13 +14,13 @@ export const AddCourse = () => {
     });
 
     useEffect(() => {
-        message(error)
-        clearError()
+        message(error);
+        clearError();
     }, [error, message, clearError])
 
 
     const changeHandler = event => {
-        setCourse_add({...course_add, [event.target.name]: event.target.value})
+        setCourse_add({...course_add, [event.target.name]: event.target.value});
     }
 
     const pressHandler = async ()  => {
