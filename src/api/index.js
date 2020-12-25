@@ -29,9 +29,9 @@ async function start() {
         {
             plugin: require('@hapi/cookie')
         },
-        {
-            plugin: require('./plugins/requestLifecycle')
-        },
+        // {
+        //     plugin: require('./plugins/requestLifecycle')
+        // },
         {
             plugin: require('./plugins/settingCookie')
         },
@@ -41,7 +41,6 @@ async function start() {
         {
             plugin: require('./plugins/loadAllRoutes')
         }
-
     ]);
 
 
@@ -54,8 +53,7 @@ async function start() {
 }
 
 
-// if you need required some other Promise response data, please use next call at the end of the init call, for e.g.:
-// someCall().then(start);
+//
 start();
 
 

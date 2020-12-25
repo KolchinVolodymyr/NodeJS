@@ -3,18 +3,8 @@
 const Joi = require('@hapi/joi');
 const User = require('../profile/service');
 const bcrypt = require('bcryptjs');
-const crypto = require('crypto');
-const {regEmail, resetEmail} = require('./service');
-const Nodemailer = require('nodemailer');
-const postmarkTransport = require('nodemailer-postmark-transport');
 const JWT = require('jsonwebtoken');
 
-
-const transport = Nodemailer.createTransport(postmarkTransport({
-    auth: {
-        apiKey: 'b6eae292-0d5d-4330-bd2d-859f8bd1971c'
-    }
-}));
 
 module.exports = [
     {
@@ -24,10 +14,6 @@ module.exports = [
             auth: {
                 mode: 'try',
                 strategy: 'session60'
-            },
-            state: {
-                parse: true,
-                failAction: 'error'
             },
             validate: {
                 payload: Joi.object({
@@ -92,9 +78,8 @@ module.exports = [
                         email, name, password: hashPassword, cart: {items: []}
                     });
                     await user.save();
-                    await transport.sendMail(regEmail(email)); //sending mail
 
-                    return h.response({message: 'Успех! Пользователь успешно создан'}).code(200);
+                    return h.response({message: 'Успех! Пользователь успешно создан'}).code(201);
                 }
             } catch (e) {
                 console.log(e)
