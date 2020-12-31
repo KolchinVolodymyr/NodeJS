@@ -27,7 +27,7 @@ export const DeleteCourseBtn = ({course, removeCourse}) => {
 
     return (
         <div className="margin-btn">
-            <button type="submit" className="btn btn-primary red" onClick={deleteCourse}>Удалить</button>
+            <button type="submit" className="btn btn-primary red" onClick={deleteCourse}>Delete</button>
         </div>
     );
 }

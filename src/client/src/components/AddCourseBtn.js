@@ -27,7 +27,7 @@ export const AddCourseBtn = ({course}) => {
 
     return (
         <div className="add-btn">
-            <button type="submit" className="btn btn-primary" onClick={fetchAddCourse}>Купить</button>
+            <button type="submit" className="btn btn-primary" onClick={fetchAddCourse}>Buy</button>
         </div>
     );
 }

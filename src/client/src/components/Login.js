@@ -31,7 +31,7 @@ export const Login = () => {
 
     return (
         <div id="login" className="col s6">
-            <h2>Войти в магазин</h2>
+            <h2>Login to store</h2>
             <div>
                 <div className="input-field">
                     <input
@@ -43,7 +43,7 @@ export const Login = () => {
                         required
                     />
                     <label htmlFor="email">Email</label>
-                    <span className="helper-text" data-error="Введите email"/>
+                    <span className="helper-text" data-error="Enter your email"/>
                 </div>
                 <div className="input-field">
                     <input
@@ -54,15 +54,15 @@ export const Login = () => {
                         onChange={changeHandler}
                         required
                     />
-                    <label htmlFor="password">Пароль</label>
-                    <span className="helper-text" data-error="Введите пароль"/>
+                    <label htmlFor="password">Password</label>
+                    <span className="helper-text" data-error="Enter password"/>
                 </div>
                 <button
                     className="btn btn-primary"
                     disabled={loading}
                     onClick={loginHandler}
                 >
-                    Войти
+                    Log in
                 </button>
             </div>
         </div>

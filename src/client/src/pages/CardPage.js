@@ -58,19 +58,19 @@ export const CardPage = () => {
         return <Loader/>
     }
     if(card.length===0) {
-        return <h2>Корзина пустая</h2>
+        return <h2>Cart is empty</h2>
     }
 
     return (
         <div>
-            <h1>Корзина</h1>
+            <h1>Shopping cart</h1>
             <div id="card">
                 <table>
                     <thead>
                     <tr>
-                        <th>Названые</th>
-                        <th>Количество</th>
-                        <th>Действия</th>
+                        <th>Named</th>
+                        <th>Number</th>
+                        <th>Actions</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -84,7 +84,7 @@ export const CardPage = () => {
                                             className="btn btn-primary"
                                             onClick={() => cardRemove(item._id)}
                                         >
-                                            Удалить-
+                                            Delete-
                                         </button>
                                     </td>
                                 </tr>
@@ -92,7 +92,7 @@ export const CardPage = () => {
                             })}
                     </tbody>
                 </table>
-                <p><strong>Цена:</strong> <span className="price">{price}</span></p>
+                <p><strong>Price:</strong> <span className="price">{price}</span></p>
             </div>
             <button
                 type="submit"
@@ -100,7 +100,7 @@ export const CardPage = () => {
                 disabled={loading}
                 onClick={ordersHandler}
             >
-                Сделать заказ
+                Make an order
             </button>
         </div>
     )

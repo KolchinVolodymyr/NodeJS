@@ -1,8 +1,8 @@
 'use strict';
 
 const MODEL_NAME = 'orders';
-const Order = require('./service');
-const User = require('../profile/service');
+const Order = require('./schema');
+const User = require('../profile/schema');
 
 
 module.exports = [
@@ -28,7 +28,8 @@ module.exports = [
                                 return total += c.count * c.course.price
                             },0)
                         }
-                    })});
+                    })
+                });
             }catch (e) {
                 console.log(e);
             }
@@ -62,12 +63,12 @@ module.exports = [
                 })
                 await order.save();
                 await request.user.clearCart();
-                return h.response({message: 'Ваш заказ был успешно сформирован!'})
+                return h.response({message: 'Your order has been successfully completed!'})
              }
              catch (e) {
                  console.log(e);
              }
         }
     }
+]
 
-    ]

@@ -36,12 +36,12 @@ export const OrderPage = () => {
         return <Loader/>
     }
     if(order.length===0) {
-        return <h2>Заказы отсутствуют</h2>
+        return <h2>No orders</h2>
     }
     return (
         <div>
             <h1>
-                Ваши заказы
+                Your orders
             </h1>
             <div className="row">
                 <div className="col s6 offset-s3">

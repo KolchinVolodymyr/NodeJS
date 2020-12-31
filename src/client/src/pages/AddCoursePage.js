@@ -4,7 +4,7 @@ import {useHttp} from "../hooks/http.hook";
 import {useHistory} from 'react-router-dom';
 import {useMessage} from "../hooks/message.hook";
 
-export const AddCourse = () => {
+export const AddCoursePage = () => {
     const history = useHistory();
     const auth = useContext(AuthContext);
     const {request, loading, clearError, error} = useHttp();
@@ -36,7 +36,7 @@ export const AddCourse = () => {
     return (
         <div>
            <h1>
-               Добавить курс
+               Add course
            </h1>
             <div>
                 <div className="input-field">
@@ -48,8 +48,8 @@ export const AddCourse = () => {
                         onChange={changeHandler}
                         required
                     />
-                        <label htmlFor="title">Названые курса</label>
-                        <span className="helper-text" data-error="Введите название"/>
+                        <label htmlFor="title">Course name</label>
+                        <span className="helper-text" data-error="Enter the title"/>
                 </div>
                 <div className="input-field">
                     <input
@@ -60,8 +60,8 @@ export const AddCourse = () => {
                         onChange={changeHandler}
                         required
                     />
-                        <label htmlFor="price">Цена курса</label>
-                        <span className="helper-text" data-error="Введите цену"/>
+                        <label htmlFor="price">Course price</label>
+                        <span className="helper-text" data-error="Enter the price"/>
                 </div>
                 <div className="input-field">
                     <input
@@ -72,8 +72,8 @@ export const AddCourse = () => {
                         onChange={changeHandler}
                         required
                     />
-                        <label htmlFor="img">URL картинки</label>
-                        <span className="helper-text" data-error="Введите URL картинки"/>
+                        <label htmlFor="img">Image URL</label>
+                        <span className="helper-text" data-error="Enter the URL of the image"/>
                 </div>
 
                 <button
@@ -81,7 +81,7 @@ export const AddCourse = () => {
                     disabled={loading}
                     onClick={pressHandler}
                 >
-                    Добавить
+                    Add to
                 </button>
             </div>
         </div>

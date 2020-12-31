@@ -4,7 +4,7 @@ import {Switch, Route, Redirect} from 'react-router-dom'
 import {AuthPage} from './pages/AuthPage'
 import {CoursesPage} from "./pages/CoursesPage";
 import {HomePage} from "./pages/HomePage";
-import {AddCourse} from "./pages/AddCourse";
+import {AddCoursePage} from "./pages/AddCoursePage";
 import {ProfilePage} from "./pages/ProfilePage";
 import {CardPage} from "./pages/CardPage";
 import {OrderPage} from "./pages/OrdersPage";
@@ -28,7 +28,7 @@ export const useRoutes = isAuthenticated => {
                     <CourseEditPage />
                 </Route>
                 <Route path="/add-course" exact>
-                    <AddCourse />
+                    <AddCoursePage />
                 </Route>
                 <Route path="/profile" exact>
                     <ProfilePage />

@@ -2,7 +2,7 @@
 
 const MODEL_NAME = 'courses';
 const Joi = require('@hapi/joi');
-const Course = require('../add-course/service');
+const Course = require('../add-course/schema');
 
 module.exports = [
 
@@ -30,9 +30,9 @@ module.exports = [
             },
             validate: {
                 payload: Joi.object({
-                   title: Joi.string().min(3).required().error(new Error('Минимальная длинна названия 3 символа')),
-                   price: Joi.number().integer().required().error(new Error('Введите корректную цену')),
-                   img: Joi.string().uri().required().error(new Error('Введите корректный Url картинки')),
+                   title: Joi.string().min(3).required().error(new Error('Minimum name length 3 characters')),
+                   price: Joi.number().integer().required().error(new Error('Enter the correct price')),
+                   img: Joi.string().uri().required().error(new Error('Enter the correct url of the picture')),
                 }),
                 options: {
                     allowUnknown: true,
@@ -44,9 +44,8 @@ module.exports = [
         },
         handler: async function (request, h) {
             try {
-
                 await Course.findByIdAndUpdate(request.payload.id, request.payload);
-                return h.response({message: 'Данные успешно изменены!'}).code(200).takeover();
+                return h.response({message: 'Data changed successfully!'}).code(200).takeover();
             } catch (e){
                 console.log(e);
             }
@@ -64,8 +63,7 @@ module.exports = [
         handler: async function (request, h) {
             try {
                 await Course.deleteOne({_id: request.payload.id});
-                return h.response({message: 'Курс удален!'});
-                // return h.redirect(`/${MODEL_NAME}`);
+                return h.response({message: 'Course deleted!'});
             } catch (e){
                 console.log(e);
             }

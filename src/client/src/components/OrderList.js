@@ -8,7 +8,7 @@ export const OrderList = ({item}) => {
             <div className="card">
                 <div className="card-content">
                     <span className="card-title">
-                        Заказ <small>{item._id}</small>
+                        Order <small>{item._id}</small>
                     </span>
                     <p>
                         {item.date}
@@ -21,7 +21,7 @@ export const OrderList = ({item}) => {
                             )
                         })}
                     </ol>
-                    <p>Цена:<span className="price">{item.price}</span></p>
+                    <p>Price:<span className="price">{item.price}</span></p>
                 </div>
             </div>
         </div>

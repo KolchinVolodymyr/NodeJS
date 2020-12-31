@@ -48,7 +48,11 @@
     margin-bottom: 1rem;
     margin-top: 0.5rem;
 }
-
+.stLoader {
+    display: flex;
+    justify-content: center;
+    padding-top: 2rem
+}
 
 
 

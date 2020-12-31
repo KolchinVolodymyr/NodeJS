@@ -33,13 +33,13 @@ export const CoursesPage = () => {
     }
     if (!courses.length) {
         return (
-            <p className="center">Курсов пока нет!!! </p>
+            <p className="center">No courses yet !!! </p>
         )
     }
 
     return (
         <div>
-            <h1>Все курсы</h1>
+            <h1>All courses</h1>
             <div className="row">
                 {courses.map(course => {
                      return (

@@ -2,7 +2,7 @@
 
 const MODEL_NAME = 'add-course';
 const Joi = require('@hapi/joi');
-const Course = require('./service');
+const Course = require('./schema');
 
 
 module.exports = [
@@ -16,9 +16,9 @@ module.exports = [
             },
             validate: {
                 payload: Joi.object({
-                    title: Joi.string().min(3).required().error(new Error('Минимальная длинна названия 3 символа')),
-                    price: Joi.number().integer().required().error(new Error('Введите корректную цену')),
-                    img: Joi.string().uri().required().error(new Error('Введите корректный Url картинки')),
+                    title: Joi.string().min(3).required().error(new Error('Minimum name length 3 characters')),
+                    price: Joi.number().integer().required().error(new Error('Enter the correct price')),
+                    img: Joi.string().uri().required().error(new Error('Enter the correct url of the picture')),
                 }),
                 options: {
                     allowUnknown: true,
@@ -38,9 +38,9 @@ module.exports = [
 
             course.save();
             if (!course) {
-                return h.response({message: 'Произошла ошибка, повторите позже!'})
+                return h.response({message: 'An error occured, please try again later!'})
             }
-            return h.response({message: 'Курс успешно создан!!!'}).code(201).takeover();
+            return h.response({message: 'Course successfully created !!!'}).code(201).takeover();
         }
     }
 

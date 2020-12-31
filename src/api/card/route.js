@@ -1,8 +1,8 @@
 'use strict';
 
 const MODEL_NAME = 'card';
-const User = require('../profile/service');
-const Course = require('../add-course/service');
+const User = require('../profile/schema');
+const Course = require('../add-course/schema');
 const {computePrice, mapCartItems} = require('./service');
 
 module.exports = [
@@ -39,13 +39,13 @@ module.exports = [
         },
         handler: async function (request, h) {
             if (!request.payload.userId) {
-                return h.response({message: 'Необходимо авторизоваться'}).code(401);
+                return h.response({message: 'Login required'}).code(401);
             }
             request.user = await User.findById(request.payload.userId);
             const course = await Course.findById(request.payload.id);
 
             await request.user.addToCart(course);
-            return h.response({message: 'Товар добавлен в корзину!'}).code(200);
+            return h.response({message: 'Added to cart!'}).code(200);
 
         }
     },

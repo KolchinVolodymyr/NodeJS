@@ -59,20 +59,20 @@ export const CourseEditPage = () => {
     return (
         <div>
             <h1>
-                Редактирования курса {course.title}
+                Course editing {course.title}
             </h1>
             <div className="row">
                 <div>
                     <div className="input-field">
                         <input
-                            placeholder="Вставьте название"
+                            placeholder="Insert title"
                             id="title"
                             name="title"
                             type="text"
                             value={course.title}
                             onChange={changeHandler}
                         />
-                        <label className="active" htmlFor="link">Введите название</label>
+                        <label className="active" htmlFor="link">Enter the title</label>
                     </div>
                     <div className="input-field">
                         <input
@@ -84,8 +84,8 @@ export const CourseEditPage = () => {
                             onChange={changeHandler}
                             required
                         />
-                        <label className="active" htmlFor="price">Цена курса</label>
-                        <span className="helper-text" data-error="Введите цену"/>
+                        <label className="active" htmlFor="price">Course price</label>
+                        <span className="helper-text" data-error="Enter the price"/>
                     </div>
                     <div className="input-field">
                         <input
@@ -97,8 +97,8 @@ export const CourseEditPage = () => {
                             onChange={changeHandler}
                             required
                         />
-                        <label className="active" htmlFor="img">URL картинки</label>
-                        <span className="helper-text" data-error="Введите URL картинки"/>
+                        <label className="active" htmlFor="img">Image URL</label>
+                        <span className="helper-text" data-error="Enter the URL of the image"/>
                     </div>
 
                     <button
@@ -106,7 +106,7 @@ export const CourseEditPage = () => {
                         disabled={loading}
                         onClick={pressHandler}
                     >
-                       Изменить
+                        Edit
                     </button>
                 </div>
             </div>

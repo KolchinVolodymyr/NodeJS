@@ -29,9 +29,6 @@ async function start() {
         {
             plugin: require('@hapi/cookie')
         },
-        // {
-        //     plugin: require('./plugins/requestLifecycle')
-        // },
         {
             plugin: require('./plugins/settingCookie')
         },

@@ -57,7 +57,7 @@ export const ProfilePage = () => {
     return (
         <div>
             <h1>
-                Страница профиля
+                Profile page
             </h1>
             <div className="row">
                 <div className="col s6">
@@ -65,7 +65,7 @@ export const ProfilePage = () => {
                 </div>
                 <div className="col s6">
                     <p>Email <strong>  {profile.email}  </strong></p>
-                    <p>Имя <strong>  {profile.name} </strong></p>
+                    <p>Name <strong>  {profile.name} </strong></p>
                     <div>
                         <div className="input-field">
                             <input
@@ -77,8 +77,8 @@ export const ProfilePage = () => {
                                 onChange={changeHandler}
                                 required
                             />
-                            <label className='active' htmlFor="email">Введите новый Email</label>
-                            <span className="helper-text" data-error="Введите email"/>
+                            <label className='active' htmlFor="email">Enter new Email</label>
+                            <span className="helper-text" data-error="Enter your email"/>
                         </div>
                         <div className="input-field">
                             <input id="name"
@@ -89,14 +89,14 @@ export const ProfilePage = () => {
                                    onChange={changeHandler}
                                    required
                             />
-                                <label className="active" htmlFor="name">Введите новое имя</label>
-                                <span className="helper-text" data-error="Введите имя"/>
+                                <label className="active" htmlFor="name">Enter a new name</label>
+                                <span className="helper-text" data-error="Enter your name"/>
                         </div>
                         <button
                             type="submit"
                             className="btn"
                             onClick={fetchAvatarProfile}
-                        > Сохранить </button>
+                        > Save </button>
                     </div>
                 </div>
             </div>

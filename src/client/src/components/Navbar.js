@@ -11,7 +11,7 @@ export const Navbar = () => {
     const logoutHandler = (event) => {
         event.preventDefault();
         auth.logout();
-        request('/logout', 'GET', null, {});
+        request('/logout', 'POST', null, {});
         history.push('/')
     }
 
@@ -20,16 +20,16 @@ export const Navbar = () => {
             <nav>
                 <div className="nav-wrapper">
                     <a href="/" className="brand-logo">
-                        Курсы
+                        Courses
                     </a>
                     <ul id="nav-mobile" className="right hide-on-med-and-down">
-                        <li><NavLink to="/">Главная</NavLink></li>
-                        <li><NavLink to="/courses">Курсы</NavLink></li>
-                        <li><NavLink to="/add-course">Добавить курс</NavLink></li>
-                        <li><NavLink to="/profile">Профиль</NavLink></li>
-                        <li><NavLink to="/card">Корзина</NavLink></li>
-                        <li><NavLink to="/orders">Заказы</NavLink></li>
-                        <li><a href="/logout" onClick={logoutHandler}>Выйти</a></li>
+                        <li><NavLink to="/">Home</NavLink></li>
+                        <li><NavLink to="/courses">Courses</NavLink></li>
+                        <li><NavLink to="/add-course">Add course</NavLink></li>
+                        <li><NavLink to="/profile">Profile</NavLink></li>
+                        <li><NavLink to="/card">Basket</NavLink></li>
+                        <li><NavLink to="/orders">Orders</NavLink></li>
+                        <li><a href="/logout" onClick={logoutHandler}>Go out</a></li>
                     </ul>
                 </div>
             </nav>
@@ -39,13 +39,12 @@ export const Navbar = () => {
             <nav>
                 <div className="nav-wrapper">
                     <a href="/" className="brand-logo">
-                        <img src="https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.pngwing.com%2Fru%2Ffree-png-henbv&psig=AOvVaw1zLpAqCY2ob63zEVkqB_Md&ust=1608984346504000&source=images&cd=vfe&ved=0CAIQjRxqFwoTCNinmPeL6e0CFQAAAAAdAAAAABAD" alt=""/>
-                        Курсы
+                        Courses
                     </a>
                     <ul id="nav-mobile" className="right hide-on-med-and-down">
-                        <li><NavLink to="/">Главная</NavLink></li>
-                        <li><NavLink to="/courses">Курсы</NavLink></li>
-                        <li><a href="/login" >Войти</a></li>
+                        <li><NavLink to="/">Home</NavLink></li>
+                        <li><NavLink to="/courses">Courses</NavLink></li>
+                        <li><a href="/login">Go out</a></li>
                     </ul>
                 </div>
             </nav>

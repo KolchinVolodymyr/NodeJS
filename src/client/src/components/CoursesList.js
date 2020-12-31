@@ -34,8 +34,8 @@ export const CoursesList = ({ course, removeCourse }) => {
                 </div>
                 <div className="card-action action">
                     <div className="row">
-                        <Link to={`/courses/${course._id}`}>Открыть</Link>
-                        { course.userId===userId && <Link to={`/courses/${course._id}/edit`}>Редактировать</Link> }
+                        <Link to={`/courses/${course._id}`}>Open</Link>
+                        { course.userId===userId && <Link to={`/courses/${course._id}/edit`}>Edit</Link> }
                     </div>
                     <div className="row">
                         <AddCourseBtn course={course} />

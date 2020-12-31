@@ -1,7 +1,7 @@
 'use strict';
 
 const MODEL_NAME = 'courses';
-const Course = require('../add-course/service');
+const Course = require('../add-course/schema');
 
 module.exports = [
     {
@@ -30,7 +30,6 @@ module.exports = [
         handler: async function (request, h) {
             try {
                 const course = await Course.findById(request.params.id);
-
                 return h.response(course).code(200).takeover();
             } catch (e) {
                 console.log(e);

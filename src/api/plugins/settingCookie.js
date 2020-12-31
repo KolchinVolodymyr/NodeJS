@@ -1,4 +1,4 @@
-const User = require('../profile/service');
+const User = require('../profile/schema');
 
 exports.plugin = {
     name: 'settingCookie',

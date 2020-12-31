@@ -30,7 +30,7 @@ export const Register = () => {
 
     return (
         <div id="register" className="col s6">
-            <h2>Создать аккаунт </h2>
+            <h2>Create an account</h2>
             <div>
                 <div className="input-field">
                     <input
@@ -42,7 +42,7 @@ export const Register = () => {
                         required
                     />
                     <label htmlFor="remail">Email</label>
-                    <span className="helper-text" data-error="Введите email"/>
+                    <span className="helper-text" data-error="Enter your email"/>
                 </div>
                 <div className="input-field">
                     <input
@@ -53,8 +53,8 @@ export const Register = () => {
                         onChange={changeHandlerRegister}
                         required
                     />
-                    <label htmlFor="rpassword">Пароль</label>
-                    <span className="helper-text" data-error="Введите пароль"/>
+                    <label htmlFor="rpassword">Password</label>
+                    <span className="helper-text" data-error="Enter password"/>
                 </div>
                 <div className="input-field">
                     <input
@@ -65,8 +65,8 @@ export const Register = () => {
                         onChange={changeHandlerRegister}
                         required
                     />
-                    <label htmlFor="confirm">Пароль еще раз</label>
-                    <span className="helper-text" data-error="Введите пароль"/>
+                    <label htmlFor="confirm">The password again</label>
+                    <span className="helper-text" data-error="Enter password"/>
                 </div>
                 <div className="input-field">
                     <input
@@ -77,8 +77,8 @@ export const Register = () => {
                         onChange={changeHandlerRegister}
                         required
                     />
-                    <label htmlFor="name">Ваше имя</label>
-                    <span className="helper-text" data-error="Введите имя"/>
+                    <label htmlFor="name">Your name</label>
+                    <span className="helper-text" data-error="Enter your name"/>
                 </div>
                 <button
                     className="btn btn-primary"
@@ -86,7 +86,7 @@ export const Register = () => {
                     disabled={loading}
                     onClick={registerHandler}
                 >
-                    Зарегистрироватся
+                    Register
                 </button>
             </div>
         </div>

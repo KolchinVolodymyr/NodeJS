@@ -13,7 +13,7 @@ export const HomePage = () => {
                 <div className="indeterminate"/>
             </div>
             <p>
-                Сайт временно недоступен. Извините, проводятся регламентные работы.
+                The site is temporarily unavailable. Sorry, routine maintenance is underway.
             </p>
 
         </div>
