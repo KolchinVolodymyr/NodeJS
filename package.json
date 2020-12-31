@@ -20,12 +20,12 @@
   "homepage": "https://github.com/KolchinVolodymyr/NodeJS#readme",
   "dependencies": {
     "@hapi/cookie": "^10.1.0",
+    "@hapi/hapi": "^20.0.3",
     "@hapi/joi": "^15.1.1",
     "@hapi/vision": "^5.5.0",
     "bcryptjs": "^2.4.3",
     "boom": "^7.3.0",
     "find": "^0.3.0",
-    "hapi": "^18.0.1",
     "hapi-flash": "^1.1.1",
     "hbs": "^3.0.1",
     "inert": "^5.1.3",
