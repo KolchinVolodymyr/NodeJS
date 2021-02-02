@@ -2,9 +2,10 @@
 
 const Hapi = require('@hapi/hapi');
 const _ = require('lodash');
+const config = require('config');
 
-const config = {
-    port: process.env.PORT || 8080,
+const сonfigure = {
+    port: config.get('port') || 8000,
     routes: {
         cors: {
             origin: ['*'],
@@ -13,19 +14,11 @@ const config = {
     }
 };
 
-if (process.env.IS_RELEASE === 'false') config.host = 'localhost';
-
-const server = new Hapi.server(config);
+const server = new Hapi.server(сonfigure);
 
 async function start() {
     // register plugins to server instance
     await server.register([
-        {
-            plugin: require('inert')
-        },
-        {
-            plugin: require('@hapi/vision')
-        },
         {
             plugin: require('@hapi/cookie')
         },

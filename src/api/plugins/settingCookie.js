@@ -1,4 +1,5 @@
 const User = require('../profile/schema');
+const config = require('config');
 
 exports.plugin = {
     name: 'settingCookie',
@@ -10,7 +11,7 @@ exports.plugin = {
                 name: 'sid-example',
                 ttl: 168 * 60 * 60 * 1000,
                 // Don't forget to change it to your own secret password!
-                password: 'password-should-be-32-characters',
+                password: config.get('passwordCookies'),
                 // For working via HTTP in localhost
                 isSecure: false
             },

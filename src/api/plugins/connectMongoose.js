@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const config = require('config');
 
 exports.plugin = {
     name: 'connectMongoose',
@@ -6,7 +7,7 @@ exports.plugin = {
     register: async function (server, options) {
         //
         //connect BD
-        const url =`mongodb+srv://admin:380990302581@cluster0.eufzr.mongodb.net/shop`
+        const url = config.get('mongoUrl');
         await mongoose.connect(url,{
             useNewUrlParser: true,
             useUnifiedTopology: true,

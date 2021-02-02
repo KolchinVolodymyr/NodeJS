@@ -1,0 +1,5 @@
+{
+    "port": 8080,
+    "mongoUrl": "mongodb+srv://admin:380990302581@cluster0.eufzr.mongodb.net/shop",
+    "passwordCookies": "EtL2Vr4ss23jL8E2CHXY4uGs5a9vj57y"
+}
