@@ -42,6 +42,7 @@ export const UploadImg = ({profile}) => {
             <input
                 type="file"
                 name="file"
+                className="custom-file-input"
                 placeholder="Upload an image"
                 onChange={uploadImage}
             />
